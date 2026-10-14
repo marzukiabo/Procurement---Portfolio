@@ -4,145 +4,213 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Procurement Control Center — Portfolio</title>
-<meta name="description" content="Portfolio of procurement systems, monitoring tools and automation projects built by Marzuki.">
+<meta name="description" content="Portfolio of procurement systems, supply chain monitoring and automation projects built by Marzuki.">
 <style>
 :root{--bg:#f4f0e6;--paper:#fffdf8;--ink:#29261f;--muted:#827b6d;--gold:#c59a3a;--gold2:#ead49a;--line:#e8dfcb;--green:#27845e;--red:#b74642;--shadow:0 24px 60px rgba(71,57,28,.10)}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:radial-gradient(circle at 80% 0,#fff9e8 0,transparent 32%),linear-gradient(135deg,#f6f1e7,#eee8d9);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+body{margin:0;background:radial-gradient(circle at 80% 0,#fff9e8 0,transparent 32%),linear-gradient(135deg,#f6f1e7,#eee8d9);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100vh}
+body.locked{overflow:hidden}
 a{text-decoration:none;color:inherit}
 h3{margin:0}
-section{padding:75px 0}
+button{font-family:inherit;color:inherit}
+section{padding:60px 0}
 .wrap{width:min(1180px,calc(100% - 40px));margin:auto}
-.flex,.nav .navin,.eyebrow,.creator,.buttons,.tabs,.tech,.historySearch,.footerLine{display:flex}
-.grid2,.heroGrid,.demoGrid,.case,.roleGrid,.autoColumns{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid3,.features,.cards,.metricRow{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 
 /* NAV */
 .nav{position:sticky;top:0;z-index:20;background:rgba(255,253,248,.82);backdrop-filter:blur(16px);border-bottom:1px solid rgba(197,154,58,.18)}
-.navin{height:70px;align-items:center;justify-content:space-between}
+.navin{height:70px;display:flex;align-items:center;justify-content:space-between}
 .brand{font-weight:900;letter-spacing:-.03em}
 .brand span{color:var(--gold)}
 .navlinks{display:flex;gap:24px;color:#6f685b;font-size:13px;font-weight:750}
+.navlinks a:hover{color:#a77e26}
 
 /* HERO */
-.hero{padding:90px 0 70px}
-.heroGrid{grid-template-columns:1.1fr .9fr;gap:55px;align-items:center}
+.hero{padding:70px 0 20px}
 .eyebrow{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.55);font-size:11px;font-weight:850;letter-spacing:.13em;text-transform:uppercase;color:#806a37}
-.hero h1{font-size:clamp(42px,6vw,76px);line-height:.98;letter-spacing:-.065em;margin:20px 0}
+.hero h1{font-size:clamp(38px,5.4vw,68px);line-height:1;letter-spacing:-.06em;margin:20px 0 16px;max-width:900px}
 .hero h1 em{font-style:normal;color:#a77e26}
-.hero p{font-size:18px;line-height:1.7;color:var(--muted);max-width:650px}
-.buttons{gap:12px;margin-top:28px;flex-wrap:wrap}
-.btn{padding:13px 18px;border-radius:14px;border:1px solid var(--line);font-weight:800;font-size:13px;background:rgba(255,255,255,.7)}
-.btn.primary{background:linear-gradient(135deg,#e8c76e,#b98928);color:#fff;box-shadow:0 12px 28px rgba(172,128,36,.22)}
-.mock{background:rgba(255,255,255,.62);border:1px solid rgba(197,154,58,.22);border-radius:28px;padding:14px;box-shadow:var(--shadow);transform:rotate(1deg)}
-.mockbar{height:24px;display:flex;gap:6px;align-items:center;padding:0 8px}
+.hero p{font-size:17px;line-height:1.7;color:var(--muted);max-width:680px;margin:0}
+.heroFoot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-top:28px}
+.creator{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px}
+.creator strong{color:var(--ink)}
+.creatorMark{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,#fffdf8,#ead49a);border:1px solid rgba(197,154,58,.35);color:#8d6b20;font-weight:950;box-shadow:0 8px 20px rgba(71,57,28,.08)}
+.btn{display:inline-block;padding:13px 18px;border-radius:14px;border:1px solid var(--line);font-weight:800;font-size:13px;background:rgba(255,255,255,.7);cursor:pointer}
+.btn.primary{background:linear-gradient(135deg,#e8c76e,#b98928);color:#fff;border-color:#c49b43;box-shadow:0 12px 28px rgba(172,128,36,.22)}
+
+/* SECTION HEAD */
+.sectionHead{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:22px}
+.sectionHead h2{font-size:38px;letter-spacing:-.045em;margin:0}
+.sectionHead p{max-width:520px;color:var(--muted);line-height:1.7;margin:0}
+.glass{background:rgba(255,255,255,.67);border:1px solid rgba(197,154,58,.18);border-radius:28px;box-shadow:var(--shadow);backdrop-filter:blur(12px)}
+.num{font-size:12px;font-weight:900;color:#a57d28;letter-spacing:.08em}
+
+/* PROJECT TABS */
+.ptabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.ptab{border:1px solid var(--line);background:#fffaf0;border-radius:12px;padding:11px 15px;font-weight:850;font-size:12px;cursor:pointer;letter-spacing:.04em}
+.ptab.active{background:linear-gradient(135deg,#e8c76e,#bd8f31);color:#fff;border-color:#c49b43}
+
+/* CAROUSEL */
+.carousel{position:relative}
+.viewport{overflow:hidden;border-radius:28px}
+.track{display:flex;transition:transform .5s cubic-bezier(.22,.8,.24,1)}
+.slide{flex:0 0 100%;padding:4px}
+.pcard{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;padding:34px;min-height:440px;align-items:center}
+.pcard h3{font-size:clamp(30px,3.6vw,44px);letter-spacing:-.05em;margin:14px 0 10px;line-height:1.02}
+.pcard h3 span{color:#a77e26}
+.pcard .lead{color:var(--muted);font-size:15.5px;line-height:1.7;margin:0 0 18px}
+.points{list-style:none;padding:0;margin:0 0 20px;display:grid;gap:9px}
+.points li{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5}
+.points li:before{content:"";flex:0 0 7px;height:7px;margin-top:7px;border-radius:50%;background:linear-gradient(135deg,#e8c76e,#b98928)}
+.tech{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:11.5px;font-weight:800}
+.cardFoot{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:22px}
+.status{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.status:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.status.live{background:#def2e8;color:var(--green)}
+.status.internal{background:#f7edce;color:#8d6b20}
+.status.desk{background:#efe9dc;color:#6f685b}
+
+/* VISUAL (no screenshots, CSS mock) */
+.mock{background:rgba(255,255,255,.62);border:1px solid rgba(197,154,58,.22);border-radius:26px;padding:14px;box-shadow:var(--shadow)}
+.mockbar{height:22px;display:flex;gap:6px;align-items:center;padding:0 8px}
 .dot{width:7px;height:7px;border-radius:50%;background:#d8c9a2}
-.screen{background:linear-gradient(145deg,#fffdf9,#f4efe3);border-radius:20px;padding:18px}
-.miniTitle{font-weight:900;font-size:16px}
-.cards{gap:8px;margin:15px 0}
+.screen{background:linear-gradient(145deg,#fffdf9,#f4efe3);border-radius:18px;padding:18px}
+.miniTitle{font-weight:900;font-size:15px}
+.miniGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
 .miniCard,.metric{background:#fff;border:1px solid #eee6d5;border-radius:13px;padding:12px}
 .miniCard small,.metric small{display:block;font-size:8px;font-weight:900;color:#8b826f;letter-spacing:.1em}
 .miniCard strong{display:block;margin-top:7px;font-size:18px}
 .green{color:var(--green)!important}
 .red{color:var(--red)!important}
 .gold{color:#9a7625!important}
-.bar{height:8px;border-radius:20px;background:#eee8da;overflow:hidden;margin-top:14px}
-.bar i{display:block;height:100%;width:67%;background:linear-gradient(90deg,#d4ad4e,#9e7728)}
-.creator{margin-top:26px;align-items:center;gap:12px;color:var(--muted);font-size:13px}
-.creator strong{color:var(--ink)}
-.creatorMark{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,#fffdf8,#ead49a);border:1px solid rgba(197,154,58,.35);color:#8d6b20;font-weight:950;box-shadow:0 8px 20px rgba(71,57,28,.08)}
+.bar{height:8px;border-radius:20px;background:#eee8da;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#d4ad4e,#9e7728)}
+.rowLine{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:12px;font-weight:700}
+.flowMini{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:14px 0 4px}
+.flowMini div{background:#fff;border:1px solid #eee6d5;border-radius:10px;padding:10px 4px;text-align:center;font-size:9px;font-weight:900;letter-spacing:.06em;color:#6f685b}
+.flowMini div.on{background:linear-gradient(135deg,#f5e6bb,#e8c76e);border-color:#d7b866;color:#5c4614}
+.siteRow{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #eee6d5;border-radius:11px;padding:10px 12px;font-size:12px;margin-top:8px}
+.fileDrop{border:1.5px dashed #d7b866;border-radius:14px;padding:22px;text-align:center;font-size:12px;color:#806a37;font-weight:800;background:#fffaf0;margin-top:14px}
+.arrowDown{text-align:center;color:#c59a3a;font-weight:900;margin:8px 0}
 
-/* SECTION */
-.sectionHead{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:28px}
-.sectionHead h2{font-size:38px;letter-spacing:-.045em;margin:0}
-.sectionHead p{max-width:560px;color:var(--muted);line-height:1.7;margin:0}
-.glass{background:rgba(255,255,255,.67);border:1px solid rgba(197,154,58,.18);border-radius:28px;box-shadow:var(--shadow);backdrop-filter:blur(12px)}
-.feature{padding:26px}
-.num{font-size:12px;font-weight:900;color:#a57d28}
-.feature h3{margin:35px 0 10px}
-.feature p,.autoFeature p{color:var(--muted);line-height:1.65;font-size:14px}
-.case>div{padding:28px}
-.case h3{margin-top:0}
-.case li{color:var(--muted);line-height:1.7;font-size:14px}
+/* NAV CONTROLS */
+.ctrl{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:14px}
+.dots{display:flex;gap:8px}
+.dots button{width:10px;height:10px;border-radius:999px;border:0;background:#dccfae;cursor:pointer;padding:0;transition:width .3s}
+.dots button.active{width:28px;background:linear-gradient(90deg,#d4ad4e,#9e7728)}
+.arrows{display:flex;gap:10px;align-items:center}
+.counter{font-size:12px;font-weight:850;color:var(--muted);margin-right:6px}
+.arrow{width:46px;height:46px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.8);font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 8px 20px rgba(71,57,28,.06)}
+.arrow:hover{border-color:#c49b43;color:#a77e26}
+.arrow:disabled{opacity:.4;cursor:default}
 
 /* ROLE */
-.roleCard{margin-top:24px;padding:24px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.55);box-shadow:var(--shadow)}
+.roleGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 .roleItem{padding:18px;border:1px solid var(--line);border-radius:16px;background:rgba(255,253,248,.72)}
 .roleItem small{display:block;color:#806a37;font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px}
-.roleItem b{font-size:15px}
+.roleItem b{font-size:14.5px;line-height:1.45}
 
-/* DEMO */
-.demo{padding:20px}
-.tabs{gap:8px;flex-wrap:wrap;margin-bottom:18px}
-.tab{border:1px solid var(--line);background:#fffaf0;border-radius:12px;padding:11px 15px;font-weight:850;font-size:12px;cursor:pointer}
+/* MODAL */
+.modal{position:fixed;inset:0;z-index:50;display:none;align-items:flex-start;justify-content:center;padding:28px 16px;background:rgba(41,38,31,.38);backdrop-filter:blur(6px);overflow-y:auto}
+.modal.open{display:flex;animation:fade .25s ease}
+.panel{width:min(1000px,100%);background:var(--paper);border:1px solid rgba(197,154,58,.25);border-radius:28px;box-shadow:0 40px 90px rgba(41,38,31,.25);position:relative;animation:rise .3s ease}
+.panelHead{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 26px;background:rgba(255,253,248,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);border-radius:28px 28px 0 0}
+.panelHead b{font-size:15px;letter-spacing:-.02em}
+.close{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:18px;cursor:pointer;flex:0 0 auto}
+.panelBody{padding:28px 26px 32px}
+.panelBody h2{font-size:clamp(28px,3.4vw,40px);letter-spacing:-.05em;margin:14px 0 10px;line-height:1.05}
+.panelBody h2 span{color:#a77e26}
+.panelBody .lead{color:var(--muted);line-height:1.7;margin:0;max-width:760px}
+.block{margin-top:28px}
+.block>h4{margin:0 0 14px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#806a37}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.box{padding:22px;background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:20px}
+.box h3{font-size:16px;margin-bottom:8px}
+.box ul{padding-left:18px;margin:0}
+.box li{color:var(--muted);line-height:1.7;font-size:14px}
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.feat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px}
+.feat h3{font-size:15px;margin:16px 0 6px}
+.feat p{color:var(--muted);line-height:1.6;font-size:13.5px;margin:0}
+.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.flow.five{grid-template-columns:repeat(5,1fr)}
+.step{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px 10px;text-align:center}
+.step small{display:block;font-size:9px;font-weight:900;letter-spacing:.12em;color:#a57d28;margin-bottom:6px}
+.step strong{font-size:13px;display:block}
+.step span{display:block;font-size:11px;color:var(--muted);margin-top:4px}
+.step.done{background:linear-gradient(135deg,#fffdf8,#f5edda);border-color:#d7b866}
+.note{margin-top:28px;padding:20px 22px;border-radius:20px;background:linear-gradient(135deg,rgba(234,212,154,.35),rgba(255,255,255,.7));border:1px solid rgba(197,154,58,.25)}
+.note p{margin:6px 0 0;color:var(--muted);line-height:1.7;font-size:14px}
+
+/* DEMO (Procurement Control Center + Mini ERP) */
+.demo{padding:18px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tab{border:1px solid var(--line);background:#fffaf0;border-radius:12px;padding:10px 14px;font-weight:850;font-size:11.5px;cursor:pointer}
 .tab.active{background:linear-gradient(135deg,#e8c76e,#bd8f31);color:#fff;border-color:#c49b43}
-.demoPanel{padding:22px;background:rgba(255,255,255,.72);border:1px solid #eee5d3;border-radius:20px}
-.metricRow{gap:10px}
-.metric{padding:15px;border-radius:16px;border-color:#eee5d3}
-.metric small{font-size:9px;color:#8a806e;font-weight:850}
-.metric b{display:block;margin-top:7px;font-size:22px}
-.table{width:100%;border-collapse:collapse;font-size:12px}
+.demoPanel{padding:20px;background:rgba(255,255,255,.72);border:1px solid #eee5d3;border-radius:20px;overflow-x:auto}
+.demoGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.metricRow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.metric{padding:14px;border-radius:16px;border-color:#eee5d3}
+.metric b{display:block;margin-top:7px;font-size:20px}
+.table{width:100%;border-collapse:collapse;font-size:12px;min-width:620px}
 .table th{text-align:left;color:#82765b;font-size:9px;letter-spacing:.12em;padding:12px 8px;border-bottom:1px solid var(--line)}
-.table td{padding:13px 8px;border-bottom:1px solid #eee8da}
-.badge{display:inline-block;padding:6px 9px;border-radius:999px;font-size:9px;font-weight:900}
+.table td{padding:12px 8px;border-bottom:1px solid #eee8da}
+.badge{display:inline-block;padding:6px 9px;border-radius:999px;font-size:9px;font-weight:900;white-space:nowrap}
 .badge.red{background:#f9e2e0}
 .badge.green{background:#def2e8}
 .badge.gold{background:#f7edce}
-.historySearch{gap:10px}
-.historySearch input{flex:1;border:1px solid #d8c39a;background:#fff;border-radius:14px;padding:14px 16px;outline:none;font-size:14px}
-.historySearch button{border:0;border-radius:14px;padding:0 22px;background:linear-gradient(135deg,#e6c269,#b98a2d);color:#fff;font-weight:900;cursor:pointer}
-.stack{display:grid;gap:12px}
-.stackItem{padding:18px;border:1px solid #eee5d3;background:#fff;border-radius:18px;display:flex;justify-content:space-between;gap:15px}
+.search{display:flex;gap:10px}
+.search input{flex:1;border:1px solid #d8c39a;background:#fff;border-radius:14px;padding:13px 15px;outline:none;font-size:14px;min-width:0}
+.search button{border:0;border-radius:14px;padding:0 20px;background:linear-gradient(135deg,#e6c269,#b98a2d);color:#fff;font-weight:900;cursor:pointer}
+.stack{display:grid;gap:10px}
+.stackItem{padding:16px;border:1px solid #eee5d3;background:#fff;border-radius:16px;display:flex;justify-content:space-between;gap:15px;align-items:center}
 .stackItem small{color:var(--muted)}
-.tech{flex-wrap:wrap;gap:10px}
-.chip{padding:10px 13px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:12px;font-weight:800}
-
-/* AUTO SORTIR */
-.autoProject{padding:32px}
-.autoTitle{font-size:44px;letter-spacing:-.05em;margin:18px 0 10px}
-.autoTitle span{color:#a77e26}
-.autoDescription{color:var(--muted);font-size:16px;line-height:1.7;max-width:760px}
-.autoWorkflow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:32px 0}
-.autoStep{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px 10px;text-align:center;box-shadow:0 8px 20px rgba(71,57,28,.04)}
-.autoStep small{display:block;font-size:9px;font-weight:900;letter-spacing:.12em;color:#a57d28;margin-bottom:7px}
-.autoStep strong{font-size:14px}
-.autoStep.complete{background:linear-gradient(135deg,#fffdf8,#f5edda);border-color:#d7b866}
-.autoPanel{padding:26px;background:rgba(255,255,255,.55);border:1px solid var(--line);border-radius:20px}
-.autoPanel h3{margin-top:10px}
-.autoPanel ul{padding-left:20px;margin-bottom:0}
-.autoPanel li{color:var(--muted);line-height:1.7;font-size:14px;margin-bottom:7px}
-.autoFeatures{margin-top:30px}
-.autoFeatures>h3,.autoTech>h3{margin-bottom:18px}
-.autoFeature{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px}
-.autoFeature h3{margin:25px 0 10px}
-.autoTech{margin-top:30px}
-.autoImpact{margin-top:30px;padding:25px;border-radius:20px;background:linear-gradient(135deg,rgba(234,212,154,.35),rgba(255,255,255,.7));border:1px solid rgba(197,154,58,.25)}
-.autoImpact h3{margin:10px 0}
-.autoImpact p{margin:0;color:var(--muted);line-height:1.7;font-size:14px}
+.tl{display:grid;gap:0;margin-top:16px}
+.tlRow{display:grid;grid-template-columns:22px 1fr auto;gap:12px;align-items:start;padding:10px 0;position:relative}
+.tlRow:not(:last-child):after{content:"";position:absolute;left:10px;top:30px;bottom:-10px;width:2px;background:#eadfc4}
+.tlDot{width:22px;height:22px;border-radius:50%;border:2px solid #d8c9a2;background:#fff;display:grid;place-items:center;font-size:11px;font-weight:900;color:#fff}
+.tlRow.done .tlDot{background:linear-gradient(135deg,#e8c76e,#b98928);border-color:#b98928}
+.tlRow.now .tlDot{border-color:#b98928;box-shadow:0 0 0 4px rgba(197,154,58,.18)}
+.tlRow b{font-size:13.5px}
+.tlRow small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.tlRow time{font-size:11px;color:var(--muted);font-weight:700;white-space:nowrap}
 
 /* FOOTER */
-.footer{padding:36px 0 48px}
-.footerLine{justify-content:space-between;border-top:1px solid var(--line);padding-top:22px;gap:20px;flex-wrap:wrap;color:var(--muted);font-size:12px}
+.footer{padding:30px 0 44px}
+.footerLine{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:22px;gap:20px;flex-wrap:wrap;color:var(--muted);font-size:12px}
 .footerLine strong{color:var(--ink)}
 
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.track,.modal.open,.panel{transition:none;animation:none}}
+
 /* RESPONSIVE */
-@media(max-width:850px){
-.heroGrid,.demoGrid,.case,.autoColumns,.features,.autoWorkflow,.metricRow{grid-template-columns:1fr}
-.navlinks{display:none}
-.hero{padding-top:55px}
-.sectionHead{display:block}
-.mock{transform:none}
-.wrap{width:min(100% - 24px,1180px)}
-.autoStep{display:flex;align-items:center;justify-content:center;gap:12px}
+@media(max-width:900px){
+.pcard{grid-template-columns:1fr;padding:24px;gap:22px;min-height:0}
+.roleGrid{grid-template-columns:1fr 1fr}
+.feats{grid-template-columns:1fr 1fr}
+.flow,.flow.five{grid-template-columns:repeat(3,1fr)}
 }
 @media(max-width:760px){
-.roleGrid{grid-template-columns:1fr}
-.creator{align-items:flex-start}
-.autoProject{padding:22px}
-.autoTitle{font-size:34px}
-.historySearch{flex-direction:column}
-.historySearch button{height:46px}
+.navlinks{display:none}
+.wrap{width:min(100% - 24px,1180px)}
+.hero{padding-top:44px}
+.sectionHead{display:block}
+.sectionHead p{margin-top:10px}
+.two,.demoGrid,.feats,.roleGrid{grid-template-columns:1fr}
+.flow,.flow.five{grid-template-columns:1fr 1fr}
+.metricRow{grid-template-columns:1fr 1fr}
+.flowMini{grid-template-columns:repeat(3,1fr)}
+.panelBody{padding:22px 18px 26px}
+.panelHead{padding:14px 18px}
+.modal{padding:12px 8px}
+.search{flex-direction:column}
+.search button{height:46px}
+.counter{display:none}
+.ptabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-right:-12px;padding-right:12px}
+.ptabs::-webkit-scrollbar{display:none}
+.ptab{white-space:nowrap;flex:0 0 auto}
 }
 </style>
 </head>
@@ -152,61 +220,45 @@ section{padding:75px 0}
 <nav class="nav"><div class="wrap navin">
 <a class="brand" href="#top">PROCUREMENT <span>CONTROL CENTER</span></a>
 <div class="navlinks">
-<a href="#overview">Overview</a><a href="#demo">Live Demo</a><a href="#features">Features</a>
-<a href="#auto-sortir">Auto Sortir</a><a href="#role">My Role</a><a href="#stack">Tech Stack</a>
+<a href="#projects">Projects</a><a href="#role">My Role</a><a href="#contact">Contact</a>
 </div>
 </div></nav>
 
 <main id="top">
 
 <!-- HERO -->
-<section class="hero"><div class="wrap heroGrid">
-<div>
-<span class="eyebrow">Portfolio Project · Procurement System</span>
-<h1>Procurement data, turned into a <em>working control center.</em></h1>
-<p>A portfolio-safe demo of a procurement monitoring application designed to centralize PO, invoice, payment, buyer, and purchase-history workflows in one interface.</p>
-<div class="buttons">
-<a class="btn primary" href="#demo">Explore Demo</a>
-<a class="btn" href="#features">See Features</a>
-</div>
+<section class="hero"><div class="wrap">
+<span class="eyebrow">Portfolio · Procurement &amp; Supply Chain Systems</span>
+<h1>Procurement work, turned into <em>systems that run.</em></h1>
+<p>Monitoring tools, supply chain workflows, and automation built from daily procurement, expediting, and logistics operations. All data shown on this page is fictional.</p>
+<div class="heroFoot">
 <div class="creator">
 <span class="creatorMark">M</span>
-<div><strong>Created &amp; Developed by Marzuki</strong><br><span>Procurement &amp; Supply Chain Professional</span></div>
+<div><strong>Created &amp; Developed by Marzuki</strong><br><span>Procurement, Supply Chain &amp; Expediting Professional</span></div>
 </div>
-</div>
-
-<div class="mock">
-<div class="mockbar"><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
-<div class="screen">
-<div class="miniTitle">Invoice Control Center</div>
-<div class="cards">
-<div class="miniCard"><small>TOTAL PO</small><strong>298</strong></div>
-<div class="miniCard"><small>SUDAH BAYAR</small><strong class="green">97</strong></div>
-<div class="miniCard"><small>OUTSTANDING</small><strong class="red">Rp 3.4B</strong></div>
-</div>
-<div class="bar"><i></i></div>
-<div style="height:120px"></div>
-</div>
+<a class="btn primary" href="#projects">View Projects →</a>
 </div>
 </div></section>
 
-<!-- OVERVIEW -->
-<section id="overview"><div class="wrap">
+<!-- PROJECTS CAROUSEL -->
+<section id="projects"><div class="wrap">
 <div class="sectionHead">
-<h2>Project Overview</h2>
-<p>Built as an internal-style procurement application concept, then converted here into a sanitized public portfolio demo. All values and names on this page are fictional.</p>
+<h2>Projects</h2>
+<p>Swipe or use the arrows. Open <b>Detail</b> for the full workflow, features, and interactive demo.</p>
 </div>
-<div class="case">
-<div class="glass"><h3>The challenge</h3><ul>
-<li>Procurement information is spread across operational spreadsheets.</li>
-<li>Invoice and payment status need quick operational visibility.</li>
-<li>Buyers need searchable purchasing history when evaluating repeat purchases.</li>
-</ul></div>
-<div class="glass"><h3>The solution</h3><ul>
-<li>A single control center with dashboard-style monitoring.</li>
-<li>Invoice control and payment-status views with operational filters.</li>
-<li>Purchase History search for PO, item, vendor, and site.</li>
-</ul></div>
+
+<div class="ptabs" id="ptabs" role="tablist"></div>
+
+<div class="carousel" id="carousel" aria-roledescription="carousel">
+<div class="viewport"><div class="track" id="track"></div></div>
+<div class="ctrl">
+<div class="dots" id="dots"></div>
+<div class="arrows">
+<span class="counter" id="counter"></span>
+<button class="arrow" id="prev" aria-label="Previous project">←</button>
+<button class="arrow" id="next" aria-label="Next project">→</button>
+</div>
+</div>
 </div>
 </div></section>
 
@@ -214,104 +266,22 @@ section{padding:75px 0}
 <section id="role"><div class="wrap">
 <div class="sectionHead">
 <h2>My Role</h2>
-<p>Project ownership focused on translating procurement workflows into a practical internal business application.</p>
+<p>End-to-end ownership: from understanding the operational problem to delivering a tool the team actually uses.</p>
 </div>
-<div class="roleCard"><div class="roleGrid" id="roleGrid"></div></div>
-</div></section>
-
-<!-- DEMO -->
-<section id="demo"><div class="wrap">
-<div class="sectionHead">
-<h2>Interactive Demo</h2>
-<p>Dummy data only. Use the tabs to preview the main modules without exposing any real company information.</p>
-</div>
-<div class="glass demo">
-<div class="tabs">
-<button class="tab active" data-view="summary">SUMMARY</button>
-<button class="tab" data-view="invoice">INVOICE CONTROL</button>
-<button class="tab" data-view="payment">PAYMENT STATUS</button>
-<button class="tab" data-view="history">PURCHASE HISTORY</button>
-</div>
-<div id="demoContent"></div>
-</div>
-</div></section>
-
-<!-- FEATURES -->
-<section id="features"><div class="wrap">
-<div class="sectionHead">
-<h2>Key Features</h2>
-<p>The portfolio focuses on the practical functions that matter in procurement operations—not decorative dashboard elements.</p>
-</div>
-<div class="features" id="featureGrid"></div>
-</div></section>
-
-<!-- AUTO SORTIR -->
-<section id="auto-sortir"><div class="wrap">
-<div class="sectionHead">
-<h2>Project 02 · Auto Sortir</h2>
-<p>A desktop procurement automation tool built to transform Excel PO exports into a standardized Monitoring format.</p>
-</div>
-
-<div class="glass autoProject">
-<span class="eyebrow">Project 02 · Procurement Automation</span>
-<h2 class="autoTitle">AUTO <span>SORTIR</span></h2>
-<p class="autoDescription">From Excel PO Export to Monitoring — automatically. Designed to reduce repetitive manual sorting, data transformation, and formatting in procurement operations.</p>
-
-<div class="autoWorkflow" id="autoWorkflow"></div>
-
-<div class="autoColumns">
-<div class="autoPanel">
-<span class="num">INPUT</span>
-<h3>Excel PO Export</h3>
-<ul>
-<li>Import procurement PO export from Excel.</li>
-<li>Read PO, PR, vendor, buyer, quantity, approval date and ETA data.</li>
-<li>Drag &amp; drop supported in the desktop application.</li>
-</ul>
-</div>
-<div class="autoPanel">
-<span class="num">OUTPUT</span>
-<h3>Monitoring Format</h3>
-<ul>
-<li>Standardized procurement monitoring structure.</li>
-<li>Automatic date formatting.</li>
-<li>Automatic ETA calculation.</li>
-<li>Buyer name normalization.</li>
-<li>Ready-to-use Excel output.</li>
-</ul>
-</div>
-</div>
-
-<div class="autoFeatures">
-<h3>Automation Features</h3>
-<div class="features" id="autoFeatureGrid"></div>
-</div>
-
-<div class="autoTech">
-<h3>Technology Stack</h3>
-<div class="tech" id="autoTech"></div>
-</div>
-
-<div class="autoImpact">
-<span class="num">BUSINESS IMPACT</span>
-<h3>Reducing repetitive procurement data preparation</h3>
-<p>The application turns a repetitive Excel preparation process into a controlled desktop workflow, helping standardize procurement monitoring output while reducing manual data transformation steps.</p>
-</div>
-</div>
-</div></section>
-
-<!-- TECH STACK -->
-<section id="stack"><div class="wrap">
-<div class="sectionHead">
-<h2>Technology Stack</h2>
-<p>The original concept is based around lightweight business tools, making it practical for teams already working in Google Workspace.</p>
-</div>
-<div class="glass" style="padding:28px"><div class="tech" id="mainTech"></div></div>
+<div class="roleGrid" id="roleGrid"></div>
 </div></section>
 
 </main>
 
-<footer class="footer"><div class="wrap footerLine">
+<!-- MODAL -->
+<div class="modal" id="modal" aria-hidden="true">
+<div class="panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+<div class="panelHead"><b id="modalTitle"></b><button class="close" id="close" aria-label="Close detail">✕</button></div>
+<div class="panelBody" id="modalBody"></div>
+</div>
+</div>
+
+<footer class="footer" id="contact"><div class="wrap footerLine">
 <span><strong>Created &amp; Developed by Marzuki</strong> · Procurement Control Center</span>
 <span>© 2026 Marzuki · All data shown is fictional / sanitized.</span>
 </div></footer>
@@ -319,100 +289,321 @@ section{padding:75px 0}
 <script>
 const $=s=>document.querySelector(s);
 const pad=i=>String(i+1).padStart(2,'0');
-
-/* ---------- Helper generator ---------- */
 const chips=a=>a.map(x=>`<span class="chip">${x}</span>`).join('');
-const cards=(a,cls)=>a.map(([t,d],i)=>`<div class="${cls}"><span class="num">${pad(i)}</span><h3>${t}</h3><p>${d}</p></div>`).join('');
 const badge=(c,t)=>`<span class="badge ${c}">${t}</span>`;
-const metrics=a=>`<div class="metricRow" style="margin-top:10px">${a.map(([l,v,c])=>`<div class="metric"><small>${l}</small><b class="${c||''}">${v}</b></div>`).join('')}</div>`;
 const item=(t,s,r)=>`<div class="stackItem"><div><b>${t}</b><br><small>${s}</small></div>${r}</div>`;
-const table=(heads,rows)=>`<table class="table"><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td${c.cls?` class="${c.cls}"`:''}>${c.h??c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+const metricRow=a=>`<div class="metricRow">${a.map(([l,v,c])=>`<div class="metric"><small>${l}</small><b class="${c||''}">${v}</b></div>`).join('')}</div>`;
+const table=(h,rows)=>`<table class="table"><thead><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td${c.cls?` class="${c.cls}"`:''}>${c.h??c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+const feats=a=>`<div class="feats">${a.map(([t,d],i)=>`<div class="feat"><span class="num">${pad(i)}</span><h3>${t}</h3><p>${d}</p></div>`).join('')}</div>`;
+const flow=(a,cls='')=>`<div class="flow ${cls}">${a.map(([s,d],i)=>`<div class="step${i==a.length-1?' done':''}"><small>${pad(i)}</small><strong>${s}</strong>${d?`<span>${d}</span>`:''}</div>`).join('')}</div>`;
+const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-/* ---------- Static content ---------- */
+/* =========================================================
+   PROJECT DATA — edit text here
+   ========================================================= */
+const projects=[
+{
+ id:'pcc', tab:'CONTROL CENTER', label:'Project 01 · Procurement Monitoring',
+ title:'Procurement <span>Control Center</span>',
+ lead:'One control center for PO, invoice, payment, buyer, and purchase-history monitoring, replacing scattered operational spreadsheets.',
+ points:['Invoice control &amp; payment status in one view','Searchable purchase history by PO, item, vendor, site','Buyer monitoring with role-based access'],
+ stack:['Google Sheets','Apps Script','HTML / CSS / JS'],
+ status:['live','Live Demo · Dummy Data'],
+ visual:`<div class="mock"><div class="mockbar"><i class="dot"></i><i class="dot"></i><i class="dot"></i></div><div class="screen">
+  <div class="miniTitle">Invoice Control Center</div>
+  <div class="miniGrid"><div class="miniCard"><small>TOTAL PO</small><strong>298</strong></div><div class="miniCard"><small>SUDAH BAYAR</small><strong class="green">97</strong></div><div class="miniCard"><small>OUTSTANDING</small><strong class="red">Rp 3.4B</strong></div></div>
+  <div class="rowLine"><span>Payment progress</span><span>67%</span></div><div class="bar"><i style="width:67%"></i></div>
+  <div class="siteRow"><span>PO/2026/DEMO/00065</span>${badge('gold','JATUH TEMPO')}</div>
+  <div class="siteRow"><span>PO/2026/DEMO/00066</span>${badge('green','LUNAS')}</div>
+ </div></div>`,
+ detail:()=>`
+  <span class="eyebrow">Project 01 · Procurement Monitoring</span>
+  <h2>Procurement <span>Control Center</span></h2>
+  <p class="lead">Built as an internal procurement application, then converted into a sanitized public demo. All values and names below are fictional.</p>
+  <div class="block two">
+   <div class="box"><h3>The challenge</h3><ul><li>Procurement information is spread across operational spreadsheets.</li><li>Invoice and payment status need quick operational visibility.</li><li>Buyers need searchable purchasing history when evaluating repeat purchases.</li></ul></div>
+   <div class="box"><h3>The solution</h3><ul><li>A single control center with dashboard-style monitoring.</li><li>Invoice control and payment-status views with operational filters.</li><li>Purchase History search for PO, item, vendor, and site.</li></ul></div>
+  </div>
+  <div class="block"><h4>Interactive Demo · Dummy Data</h4>
+   <div class="glass demo">
+    <div class="tabs" id="pccTabs">
+     <button class="tab active" data-view="summary">SUMMARY</button>
+     <button class="tab" data-view="invoice">INVOICE CONTROL</button>
+     <button class="tab" data-view="payment">PAYMENT STATUS</button>
+     <button class="tab" data-view="history">PURCHASE HISTORY</button>
+    </div>
+    <div id="pccContent"></div>
+   </div>
+  </div>
+  <div class="block"><h4>Key Features</h4>${feats([
+   ['Procurement Dashboard','Operational overview for PO workload, procurement status, site performance, and buyer activity.'],
+   ['Invoice Monitoring','Centralized invoice control, due-date visibility, payment status, outstanding values, and overdue monitoring.'],
+   ['Purchase History','Searchable purchasing history to compare previous purchases, suppliers, sites, quantities, and prices.'],
+   ['Buyer Monitoring','Buyer-level visibility designed to support workload tracking and procurement follow-up.'],
+   ['PO &amp; Invoice Tracking','Connected views help users follow a PO from purchasing through invoice and payment.'],
+   ['Role-based Access','Screens are presented according to each user\'s responsibility.']
+  ])}</div>
+  <div class="block"><h4>Technology Stack</h4><div class="tech">${chips(['Google Sheets','Google Apps Script','HTML5','CSS3','JavaScript','Dashboard UI','Caching','Data Filtering'])}</div></div>`,
+ init:()=>initPcc()
+},
+{
+ id:'erp', tab:'MINI ERP SUPPLY CHAIN', label:'Project 02 · Supply Chain &amp; Expediting',
+ title:'Mini ERP <span>Supply Chain</span>',
+ lead:'End-to-end tracking from material request to goods received at site, connecting warehouse, procurement, and site admin in one flow.',
+ points:['MR → PR → PO → Receiving → Delivery → Site confirmation','Timestamped audit trail for every handover','Integrated with the accounting system via API'],
+ stack:['Web App','REST API','Dashboard UI','Role-based Access'],
+ status:['internal','Live Internally · Demo Uses Dummy Data'],
+ visual:`<div class="mock"><div class="mockbar"><i class="dot"></i><i class="dot"></i><i class="dot"></i></div><div class="screen">
+  <div class="miniTitle">PO/2026/DEMO/0142 · Tracking</div>
+  <div class="flowMini"><div class="on">MR</div><div class="on">PR</div><div class="on">PO</div><div class="on">RECV</div><div class="on">SHIP</div><div>SITE</div></div>
+  <div class="rowLine"><span>Progress to site</span><span>5 / 6</span></div><div class="bar"><i style="width:83%"></i></div>
+  <div class="siteRow"><span>SITE A · Spare parts</span>${badge('gold','IN TRANSIT')}</div>
+  <div class="siteRow"><span>SITE B · Consumables</span>${badge('green','RECEIVED')}</div>
+  <div class="siteRow"><span>SITE C · Safety items</span>${badge('red','WAITING PO')}</div>
+ </div></div>`,
+ detail:()=>`
+  <span class="eyebrow">Project 02 · Supply Chain &amp; Expediting</span>
+  <h2>Mini ERP <span>Supply Chain</span></h2>
+  <p class="lead">An internal system that follows every material request until the goods are confirmed at site. It runs in daily operations; the version on this page is a public preview with fictional data only.</p>
+  <div class="block"><h4>Process Flow</h4>${flow([
+   ['MR','Warehouse input'],['PR','Request raised'],['PO','Procurement update'],['RECEIVING','Goods checked'],['DELIVERY','Shipped to site'],['CONFIRMED','Site admin']
+  ])}</div>
+  <div class="block two">
+   <div class="box"><h3>The challenge</h3><ul><li>MR, PR, PO, and delivery status live in different files and people.</li><li>No single answer to "where is my material right now?"</li><li>Handover between warehouse, procurement, and site is hard to trace.</li></ul></div>
+   <div class="box"><h3>The solution</h3><ul><li>One flow with a clear owner at every stage.</li><li>Procurement updates PO data per PR number and item.</li><li>Site admin confirms receipt, closing the loop with a timestamp.</li></ul></div>
+  </div>
+  <div class="block"><h4>Interactive Demo · Track an Item</h4>
+   <div class="glass demo"><div class="demoPanel">
+    <div class="search"><input id="erpInput" placeholder="Ketik PO / PR / MR, contoh: PO/2026/DEMO/0142"/><button id="erpBtn">🔎 LACAK</button></div>
+    <div id="erpResult" style="margin-top:16px"></div>
+   </div></div>
+  </div>
+  <div class="block"><h4>Key Features</h4>${feats([
+   ['MR &amp; PR Input','Warehouse records material requests and purchase requests as the starting point of the flow.'],
+   ['PO Monitoring','Procurement monitors PR by number and item, then updates PO information.'],
+   ['Goods Receiving','Warehouse checks incoming goods from suppliers before dispatch.'],
+   ['Delivery to Site','Each shipment to a site is recorded with date and destination.'],
+   ['Site Confirmation &amp; Audit Trail','Site admin confirms receipt; every action is stored with date, time, and history.'],
+   ['Stock &amp; Scalable Dashboard','Stock monitoring plus a dashboard built to handle PO volume growing from dozens to thousands.']
+  ])}</div>
+  <div class="block"><h4>Technology</h4><div class="tech">${chips(['Web Application','REST API Integration','Accounting System Sync','Dashboard UI','Role-based Access','Audit Trail'])}</div></div>
+  <div class="note"><span class="num">PORTFOLIO NOTE</span><p>Source code and production data stay private because the system is used in daily operations. This page shows the workflow and features with fictional data.</p></div>`,
+ init:()=>initErp()
+},
+{
+ id:'auto', tab:'AUTO SORTIR', label:'Project 03 · Procurement Automation',
+ title:'Auto <span>Sortir</span>',
+ lead:'A Windows desktop tool that turns raw Excel PO exports into a standardized monitoring file, automatically.',
+ points:['Drag &amp; drop Excel, processed in one click','Automatic ETA, date formatting, buyer normalization','Packaged as a standalone .exe'],
+ stack:['Python','Tkinter','OpenPyXL','PyInstaller'],
+ status:['desk','Desktop App · Used in Daily Work'],
+ visual:`<div class="mock"><div class="mockbar"><i class="dot"></i><i class="dot"></i><i class="dot"></i></div><div class="screen">
+  <div class="miniTitle">Auto Sortir</div>
+  <div class="fileDrop">⬇ Drop Excel PO Export here<br><span style="font-weight:600;color:var(--muted)">PO_Export_DEMO.xlsx</span></div>
+  <div class="arrowDown">↓</div>
+  <div class="flowMini" style="grid-template-columns:repeat(5,1fr)"><div class="on">READ</div><div class="on">SORT</div><div class="on">PROCESS</div><div class="on">FORMAT</div><div class="on">DONE</div></div>
+  <div class="siteRow"><span>HASIL / Monitoring_DEMO.xlsx</span>${badge('green','READY')}</div>
+ </div></div>`,
+ detail:()=>`
+  <span class="eyebrow">Project 03 · Procurement Automation</span>
+  <h2>Auto <span>Sortir</span></h2>
+  <p class="lead">From Excel PO export to monitoring format, automatically. Designed to remove repetitive manual sorting, data transformation, and formatting in procurement operations.</p>
+  <div class="block"><h4>Workflow</h4>${flow([['READ'],['SORT'],['PROCESS'],['FORMAT'],['COMPLETE']],'five')}</div>
+  <div class="block two">
+   <div class="box"><span class="num">INPUT</span><h3 style="margin-top:8px">Excel PO Export</h3><ul><li>Import procurement PO export from Excel.</li><li>Read PO, PR, vendor, buyer, quantity, approval date and ETA data.</li><li>Drag &amp; drop supported in the desktop application.</li></ul></div>
+   <div class="box"><span class="num">OUTPUT</span><h3 style="margin-top:8px">Monitoring Format</h3><ul><li>Standardized procurement monitoring structure.</li><li>Automatic date formatting and ETA calculation.</li><li>Buyer name normalization.</li><li>Ready-to-use Excel output in the HASIL folder.</li></ul></div>
+  </div>
+  <div class="block"><h4>Automation Features</h4>${feats([
+   ['Excel Automation','Processes exported PO data and converts it into a standardized monitoring structure.'],
+   ['Automatic ETA','Calculates ETA by adding delivery days to the PO approval date.'],
+   ['Buyer Normalization','Standardizes buyer names into uppercase and applies predefined name rules.'],
+   ['Drag &amp; Drop','Users drop an Excel file directly into the app for processing.'],
+   ['Excel Formatting','Formats dates, columns, values, and the final monitoring layout.'],
+   ['Standalone EXE','Packaged with PyInstaller so users run it without Python installed.']
+  ])}</div>
+  <div class="block"><h4>Technology Stack</h4><div class="tech">${chips(['Python','Tkinter','TkinterDnD','OpenPyXL','PyInstaller','Excel Automation','Desktop Application'])}</div></div>
+  <div class="note"><span class="num">BUSINESS IMPACT</span><p>Turns a repetitive Excel preparation process into a controlled desktop workflow, standardizing monitoring output while reducing manual transformation steps.</p></div>`
+}
+];
+
+/* ---------- Role ---------- */
 $('#roleGrid').innerHTML=[
-['Process','Procurement workflow &amp; operational requirements'],
-['System','Dashboard, monitoring, search, and tracking design'],
-['Data','PO, invoice, payment, buyer, and purchase-history visibility'],
-['UI / UX','Gold, white &amp; glass interface with user-focused layouts']
+ ['Process','Procurement, expediting &amp; logistics workflow requirements'],
+ ['System','Dashboard, tracking, search, and automation design'],
+ ['Data','PO, invoice, payment, delivery, and purchase-history visibility'],
+ ['UI / UX','Gold, white &amp; glass interface built around real users']
 ].map(([s,b])=>`<div class="roleItem"><small>${s}</small><b>${b}</b></div>`).join('');
 
-$('#featureGrid').innerHTML=cards([
-['Procurement Dashboard','Operational overview for PO workload, procurement status, site performance, and buyer activity.'],
-['Invoice Monitoring','Centralized invoice control, due-date visibility, payment status, outstanding values, and overdue monitoring.'],
-['Purchase History','Searchable purchasing history to compare previous purchases, suppliers, sites, quantities, and prices.'],
-['Buyer Monitoring','Buyer-level visibility designed to support workload tracking and procurement follow-up.'],
-['PO &amp; Invoice Tracking','Connected operational views help users follow a PO from purchasing through invoice and payment.'],
-['Role-based Access','Designed with user roles in mind so operational screens can be presented according to responsibility.']
-],'feature glass');
+/* =========================================================
+   CAROUSEL
+   ========================================================= */
+let idx=0;
+const track=$('#track'), dots=$('#dots'), ptabs=$('#ptabs');
+track.innerHTML=projects.map((p,i)=>`
+<div class="slide" role="group" aria-roledescription="slide" aria-label="${i+1} of ${projects.length}">
+ <article class="glass pcard">
+  <div>
+   <span class="eyebrow">${p.label}</span>
+   <h3>${p.title}</h3>
+   <p class="lead">${p.lead}</p>
+   <ul class="points">${p.points.map(x=>`<li>${x}</li>`).join('')}</ul>
+   <div class="tech">${chips(p.stack)}</div>
+   <div class="cardFoot">
+    <button class="btn primary" data-detail="${i}">Detail →</button>
+    <span class="status ${p.status[0]}">${p.status[1]}</span>
+   </div>
+  </div>
+  <div>${p.visual}</div>
+ </article>
+</div>`).join('');
+dots.innerHTML=projects.map((p,i)=>`<button aria-label="Go to project ${i+1}" data-go="${i}"></button>`).join('');
+ptabs.innerHTML=projects.map((p,i)=>`<button class="ptab" role="tab" data-go="${i}">${pad(i)} · ${p.tab}</button>`).join('');
 
-$('#autoWorkflow').innerHTML=['READ','SORT','PROCESS','FORMAT','COMPLETE'].map((s,i,a)=>
-`<div class="autoStep${i==a.length-1?' complete':''}"><div><small>${pad(i)}</small><strong>${s}</strong></div></div>`).join('');
+function go(i){
+ idx=Math.max(0,Math.min(projects.length-1,i));
+ track.style.transform=`translateX(-${idx*100}%)`;
+ document.querySelectorAll('[data-go]').forEach(b=>b.classList.toggle('active',+b.dataset.go===idx));
+ document.querySelectorAll('.ptab').forEach(b=>b.setAttribute('aria-selected',+b.dataset.go===idx));
+ track.querySelectorAll('.slide').forEach((s,k)=>{s.inert=k!==idx;s.setAttribute('aria-hidden',k!==idx)});
+ $('#counter').textContent=`${pad(idx)} / ${pad(projects.length-1)}`;
+ $('#prev').disabled=idx===0; $('#next').disabled=idx===projects.length-1;
+}
+$('#prev').onclick=()=>go(idx-1);
+$('#next').onclick=()=>go(idx+1);
+document.addEventListener('click',e=>{
+ const g=e.target.closest('[data-go]'); if(g) go(+g.dataset.go);
+ const d=e.target.closest('[data-detail]'); if(d) openDetail(+d.dataset.detail);
+});
 
-$('#autoFeatureGrid').innerHTML=cards([
-['Excel Automation','Processes exported PO data and converts it into a standardized Monitoring structure.'],
-['Automatic ETA','Calculates ETA by adding the number of delivery days to the PO approval date.'],
-['Buyer Normalization','Standardizes buyer names into uppercase format and applies predefined name normalization.'],
-['Drag &amp; Drop','Users can directly drop an Excel file into the desktop application for processing.'],
-['Excel Formatting','Automatically formats dates, columns, values, and the final Monitoring structure.'],
-['Standalone EXE','Packaged as a Windows executable using PyInstaller so users can run the application without opening the Python source code.']
-],'autoFeature');
+/* swipe */
+let sx=0,sy=0,drag=false;
+const vp=$('.viewport');
+vp.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;drag=true},{passive:true});
+vp.addEventListener('touchend',e=>{
+ if(!drag)return; drag=false;
+ const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+ if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)) go(idx+(dx<0?1:-1));
+},{passive:true});
 
-$('#autoTech').innerHTML=chips(['Python','Tkinter','TkinterDnD','OpenPyXL','PyInstaller','Excel Automation','Desktop Application']);
-$('#mainTech').innerHTML=chips(['Google Sheets','Google Apps Script','HTML5','CSS3','JavaScript','Dashboard UI','Caching','Data Filtering']);
+/* keyboard */
+document.addEventListener('keydown',e=>{
+ if($('#modal').classList.contains('open')){ if(e.key==='Escape') closeDetail(); return; }
+ if(e.target.matches('input,textarea'))return;
+ if(e.key==='ArrowRight') go(idx+1);
+ if(e.key==='ArrowLeft') go(idx-1);
+});
 
-/* ---------- Demo views ---------- */
-const views={
+/* =========================================================
+   DETAIL MODAL
+   ========================================================= */
+let lastFocus=null;
+function openDetail(i){
+ const p=projects[i];
+ lastFocus=document.activeElement;
+ $('#modalTitle').innerHTML=p.title.replace(/<[^>]+>/g,'');
+ $('#modalBody').innerHTML=p.detail();
+ $('#modal').classList.add('open');
+ $('#modal').setAttribute('aria-hidden','false');
+ $('#modal').scrollTop=0;
+ document.body.classList.add('locked');
+ p.init&&p.init();
+ $('#close').focus();
+}
+function closeDetail(){
+ $('#modal').classList.remove('open');
+ $('#modal').setAttribute('aria-hidden','true');
+ document.body.classList.remove('locked');
+ lastFocus&&lastFocus.focus();
+}
+$('#close').onclick=closeDetail;
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeDetail()});
+
+/* =========================================================
+   DEMO 1 — Procurement Control Center (dummy)
+   ========================================================= */
+const pccViews={
 summary:`<div class="demoGrid">
-<div class="demoPanel"><h3 style="margin-bottom:16px">Procurement Snapshot</h3>
-<div class="metricRow">${[['TOTAL PO','298'],['SUDAH BAYAR','97','green'],['BELUM BAYAR','251','gold']].map(([l,v,c])=>`<div class="metric"><small>${l}</small><b class="${c||''}">${v}</b></div>`).join('')}</div>
-${metrics([['OUTSTANDING','Rp 3.4B','red'],['PARTIAL','2','gold'],['OVERDUE','12','red']])}
-</div>
-<div class="demoPanel"><h3 style="margin-bottom:16px">Jatuh Tempo Terdekat</h3>
-<div class="stack">
-${item('PO/2026/DEMO/00065','PT DEMO SUPPLIER · SITE A','<b class="gold">Rp 22.0M</b>')}
-${item('PO/2026/DEMO/00066','CV SAMPLE PARTNER · SITE B','<b class="gold">Rp 7.8M</b>')}
-</div></div>
+ <div class="demoPanel"><h3 style="margin-bottom:14px">Procurement Snapshot</h3>
+  ${metricRow([['TOTAL PO','298'],['SUDAH BAYAR','97','green'],['BELUM BAYAR','251','gold']])}
+  <div style="height:10px"></div>
+  ${metricRow([['OUTSTANDING','Rp 3.4B','red'],['PARTIAL','2','gold'],['OVERDUE','12','red']])}
+ </div>
+ <div class="demoPanel"><h3 style="margin-bottom:14px">Jatuh Tempo Terdekat</h3>
+  <div class="stack">
+   ${item('PO/2026/DEMO/00065','PT DEMO SUPPLIER · SITE A','<b class="gold">Rp 22.0M</b>')}
+   ${item('PO/2026/DEMO/00066','CV SAMPLE PARTNER · SITE B','<b class="gold">Rp 7.8M</b>')}
+  </div>
+ </div>
 </div>`,
-
 invoice:`<div class="demoPanel">
-<div class="historySearch" style="margin-bottom:18px"><input placeholder="Cari Invoice / Vendor / Site / PO..."/><button>🔎 CARI</button></div>
-${table(['NO INVOICE','NO PO','VENDOR','SITE','NOMINAL','PAYMENT','STATUS'],[
-[{h:'<b>INV-DEMO-001</b>'},'PO/2026/DEMO/001','PT SAMPLE SUPPLIER','SITE A',{h:'<b>Rp 18.500.000</b>'},{h:'Rp 18.500.000',cls:'green'},{h:badge('green','SUDAH BAYAR')}],
-[{h:'<b>INV-DEMO-002</b>'},'PO/2026/DEMO/002','CV EXAMPLE PARTNER','SITE B',{h:'<b>Rp 42.000.000</b>'},'Rp 0',{h:badge('red','BELUM BAYAR')}],
-[{h:'<b>INV-DEMO-003</b>'},'PO/2026/DEMO/003','PT FICTIONAL VENDOR','SITE C',{h:'<b>Rp 11.750.000</b>'},'Rp 5.000.000',{h:badge('gold','PARTIAL')}]
-])}
+ ${table(['NO INVOICE','NO PO','VENDOR','SITE','NOMINAL','PAYMENT','STATUS'],[
+  [{h:'<b>INV-DEMO-001</b>'},'PO/2026/DEMO/001','PT SAMPLE SUPPLIER','SITE A',{h:'<b>Rp 18.500.000</b>'},{h:'Rp 18.500.000',cls:'green'},{h:badge('green','SUDAH BAYAR')}],
+  [{h:'<b>INV-DEMO-002</b>'},'PO/2026/DEMO/002','CV EXAMPLE PARTNER','SITE B',{h:'<b>Rp 42.000.000</b>'},'Rp 0',{h:badge('red','BELUM BAYAR')}],
+  [{h:'<b>INV-DEMO-003</b>'},'PO/2026/DEMO/003','PT FICTIONAL VENDOR','SITE C',{h:'<b>Rp 11.750.000</b>'},'Rp 5.000.000',{h:badge('gold','PARTIAL')}]
+ ])}
 </div>`,
-
 payment:`<div class="demoPanel">
-${table(['VENDOR','SITE','INVOICE','TOTAL','PAID','OUTSTANDING','STATUS'],[
-['PT SAMPLE SUPPLIER','SITE A','3','Rp 125.000.000',{h:'Rp 125.000.000',cls:'green'},'Rp 0',{h:badge('green','LUNAS')}],
-['CV EXAMPLE PARTNER','SITE B','2','Rp 86.000.000','Rp 35.000.000',{h:'Rp 51.000.000',cls:'red'},{h:badge('gold','PARTIAL')}],
-['PT FICTIONAL VENDOR','SITE C','4','Rp 142.000.000','Rp 0',{h:'Rp 142.000.000',cls:'red'},{h:badge('red','BELUM LUNAS')}]
-])}
+ ${table(['VENDOR','SITE','INVOICE','TOTAL','PAID','OUTSTANDING','STATUS'],[
+  ['PT SAMPLE SUPPLIER','SITE A','3','Rp 125.000.000',{h:'Rp 125.000.000',cls:'green'},'Rp 0',{h:badge('green','LUNAS')}],
+  ['CV EXAMPLE PARTNER','SITE B','2','Rp 86.000.000','Rp 35.000.000',{h:'Rp 51.000.000',cls:'red'},{h:badge('gold','PARTIAL')}],
+  ['PT FICTIONAL VENDOR','SITE C','4','Rp 142.000.000','Rp 0',{h:'Rp 142.000.000',cls:'red'},{h:badge('red','BELUM LUNAS')}]
+ ])}
 </div>`,
-
 history:`<div class="demoPanel">
-<div class="historySearch"><input id="historyInput" placeholder="PO / Part Number / Nama Barang / Vendor / Site..."/><button onclick="searchHistory()">🔎 CARI</button></div>
-<p style="color:var(--muted);font-size:13px;margin:12px 0 0">Contoh: ketik <b>PO/2026/DEMO/001</b> untuk melihat hasil dummy.</p>
-<div id="historyResults" style="margin-top:18px"></div>
+ <div class="search"><input id="historyInput" placeholder="PO / Part Number / Nama Barang / Vendor / Site..."/><button id="historyBtn">🔎 CARI</button></div>
+ <p style="color:var(--muted);font-size:13px;margin:12px 0 0">Contoh: ketik <b>PO/2026/DEMO/001</b> untuk melihat hasil dummy.</p>
+ <div id="historyResults" style="margin-top:16px"></div>
 </div>`
 };
-
-function render(v='summary'){
-document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.view===v));
-$('#demoContent').innerHTML=views[v];
+function initPcc(){
+ const render=v=>{
+  document.querySelectorAll('#pccTabs .tab').forEach(x=>x.classList.toggle('active',x.dataset.view===v));
+  $('#pccContent').innerHTML=pccViews[v];
+  if(v==='history'){
+   const run=()=>{
+    const q=$('#historyInput').value.trim();
+    $('#historyResults').innerHTML=!q
+     ?item('Belum ada pencarian','Ketik PO, part number, nama barang, vendor, atau site.','')
+     :`<div class="stack">${item('PO/2026/DEMO/001','PT SAMPLE SUPPLIER · SITE A · ITEM DEMO-001','<b>Rp 18.500.000</b>')}${item('Purchase History',`Hasil demo untuk pencarian: ${esc(q)}`,'<span class="badge gold">DUMMY DATA</span>')}</div>`;
+   };
+   $('#historyBtn').onclick=run;
+   $('#historyInput').onkeydown=e=>{if(e.key==='Enter')run()};
+  }
+ };
+ document.querySelectorAll('#pccTabs .tab').forEach(t=>t.onclick=()=>render(t.dataset.view));
+ render('summary');
 }
 
-function searchHistory(){
-const q=$('#historyInput').value.trim();
-$('#historyResults').innerHTML=!q
-?item('Belum ada pencarian','Ketik PO, part number, nama barang, vendor, atau site.','')
-:item('PO/2026/DEMO/001','PT SAMPLE SUPPLIER · SITE A · ITEM DEMO-001','<b>Rp 18.500.000</b>')
-+item('Purchase History',`Hasil demo untuk pencarian: ${q.replace(/[<>]/g,'')}`,'<span class="badge gold">DUMMY DATA</span>');
+/* =========================================================
+   DEMO 2 — Mini ERP tracking (dummy)
+   ========================================================= */
+const erpData={
+ 'PO/2026/DEMO/0142':{item:'Spare parts · Hydraulic hose kit',site:'SITE A',stage:4,dates:['02 Okt 08:14','03 Okt 10:22','06 Okt 14:05','10 Okt 09:40','11 Okt 07:30','—']},
+ 'PO/2026/DEMO/0151':{item:'Consumables · Filter set',site:'SITE B',stage:6,dates:['25 Sep 09:02','26 Sep 11:15','29 Sep 13:47','03 Okt 10:10','04 Okt 06:55','06 Okt 16:20']},
+ 'PO/2026/DEMO/0163':{item:'Safety items · Coverall & gloves',site:'SITE C',stage:2,dates:['09 Okt 08:30','10 Okt 15:12','—','—','—','—']}
+};
+const erpStages=[['Material Request','Input by warehouse'],['Purchase Request','PR raised and approved'],['Purchase Order','PO issued by procurement'],['Goods Receiving','Checked at warehouse'],['Delivery to Site','Dispatched to site'],['Site Confirmation','Received by site admin']];
+function initErp(){
+ const run=()=>{
+  const raw=$('#erpInput').value.trim().toUpperCase();
+  const key=Object.keys(erpData).find(k=>raw&&k.includes(raw))||(raw.match(/^(MR|PR)/)?Object.keys(erpData)[0]:null);
+  const box=$('#erpResult');
+  if(!raw){box.innerHTML=listAll();return}
+  if(!key){box.innerHTML=item('Tidak ditemukan',`Tidak ada data dummy untuk: ${esc(raw)}`,'<span class="badge red">NOT FOUND</span>')+`<div style="margin-top:10px">${listAll()}</div>`;return}
+  const d=erpData[key], done=d.stage>=6;
+  box.innerHTML=`${item(key,`${d.item} · ${d.site}`,badge(done?'green':d.stage>=4?'gold':'red',done?'RECEIVED AT SITE':`STAGE ${d.stage}/6`))}
+  <div class="tl">${erpStages.map(([t,s],i)=>{
+   const cls=i<d.stage?'done':i===d.stage?'now':'';
+   return `<div class="tlRow ${cls}"><span class="tlDot">${i<d.stage?'✓':''}</span><div><b>${t}</b><small>${s}</small></div><time>${d.dates[i]}</time></div>`}).join('')}</div>`;
+ };
+ const listAll=()=>`<div class="stack">${Object.entries(erpData).map(([k,d])=>`<div class="stackItem" style="cursor:pointer" data-po="${k}"><div><b>${k}</b><br><small>${d.item} · ${d.site}</small></div>${badge(d.stage>=6?'green':d.stage>=4?'gold':'red',d.stage>=6?'RECEIVED':`STAGE ${d.stage}/6`)}</div>`).join('')}</div>`;
+ $('#erpBtn').onclick=run;
+ $('#erpInput').onkeydown=e=>{if(e.key==='Enter')run()};
+ $('#erpResult').onclick=e=>{const r=e.target.closest('[data-po]');if(r){$('#erpInput').value=r.dataset.po;run()}};
+ $('#erpResult').innerHTML=listAll();
 }
 
-document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>render(t.dataset.view)));
-render();
+go(0);
 </script>
 
 </body>
