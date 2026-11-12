@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outstanding Open Order · SCM Expeditor System (Demo)</title>
+<meta name="description" content="Live demo of an expediting dashboard for open purchase orders. All data is fictional.">
+<style>
+:root{
+  --ink:#16241a;--ink2:#4b5a4f;--mut:#7a877c;--line:#e1e8da;--card:rgba(255,255,255,.76);
+  --g1:#14532d;--g2:#1d7a35;--g3:#2e9447;--gold:#c9a55c;
+  --bad:#c8463c;--bad-bg:#fbe7e4;--good:#2f8f4e;--good-bg:#e3f2e5;--warn:#b7791f;--warn-bg:#fdf3dc;
+  --sa:#4f6bd8;--sb:#1a9a85;--sc:#d9822b
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;font-size:13.5px;line-height:1.45;color:var(--ink);min-height:100vh;
+  background:radial-gradient(1100px 700px at -10% -10%,#c6e2c0 0,transparent 60%),radial-gradient(900px 700px at 110% 110%,#f3dcae 0,transparent 55%),linear-gradient(135deg,#e9f2e4,#f6f1e4);background-attachment:fixed}
+button,select,input{font-family:inherit}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes flash{0%{background:#dff3e3}100%{background:transparent}}
+.wrap{max-width:1360px;margin:0 auto;padding:18px 18px 40px}
+.glass{background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.9);border-radius:20px;box-shadow:0 14px 40px rgba(40,70,40,.10)}
+.hide{display:none!important}
+
+/* header */
+.top{display:flex;align-items:center;gap:14px;padding:14px 20px;animation:up .5s both;flex-wrap:wrap}
+.logo{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:16px;letter-spacing:-.04em;background:linear-gradient(145deg,var(--g3),var(--g1) 70%,#8a7a3a);box-shadow:0 8px 18px rgba(20,83,45,.28)}
+.ttl h1{margin:0;font-size:21px;font-weight:700;letter-spacing:-.2px}
+.ttl p{margin:0;color:var(--ink2);font-size:12.5px}
+.sp{flex:1}
+.asof{font-size:12px;color:var(--mut);text-align:right}
+.asof b{display:block;color:var(--ink);font-size:13px}
+.me{font-size:12px;color:var(--ink2);display:flex;align-items:center;gap:6px}
+.btn{border:1px solid var(--line);background:#fff;color:var(--g1);border-radius:12px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;gap:7px;align-items:center;transition:.15s;text-decoration:none}
+.btn:hover{border-color:var(--g3);transform:translateY(-1px)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn.primary{background:linear-gradient(90deg,var(--g2),var(--g3) 60%,var(--gold));color:#fff;border:0;box-shadow:0 8px 18px rgba(29,122,53,.25)}
+.btn.blue{background:#eaf1ff;border-color:#c7d7f5;color:#274a8c}
+
+/* tab bar */
+.tabbar{position:sticky;top:8px;z-index:30;display:flex;gap:6px;padding:6px;margin:14px 0 0;animation:up .5s .03s both}
+.tab{flex:1;display:flex;align-items:center;justify-content:center;gap:9px;border:0;background:transparent;border-radius:15px;padding:12px 14px;font-size:14px;font-weight:700;color:var(--ink2);cursor:pointer;transition:background .2s,color .2s,box-shadow .2s;white-space:nowrap}
+.tab:hover{background:rgba(46,148,71,.09);color:var(--g1)}
+.tab:focus-visible{outline:2px solid var(--g3);outline-offset:2px}
+.tab .ti{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:#eef2ea;font-size:14px;transition:.2s}
+.tab.on{background:linear-gradient(90deg,var(--g2),var(--g3));color:#fff;box-shadow:0 8px 18px rgba(29,122,53,.28)}
+.tab.on .ti{background:rgba(255,255,255,.22)}
+.tab .bd{min-width:24px;padding:1px 8px;border-radius:99px;background:#fff;color:var(--g1);font-size:11.5px;font-weight:800;text-align:center}
+.tab:not(.on) .bd{background:#e3f2e5}
+.tab .bd:empty{display:none}
+.view.swap{animation:up .35s both}
+#vVendor{margin-top:14px}
+@media(max-width:720px){.tab{flex-direction:column;gap:4px;padding:8px 4px;font-size:12px}.tab .bd{position:absolute;margin:-4px 0 0 34px;padding:0 6px;font-size:10px}.tab{position:relative}}
+
+/* filters */
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0;padding:10px 14px;animation:up .5s .05s both}
+.seg{display:flex;background:#f1f5ee;border-radius:12px;padding:3px;flex-wrap:wrap}
+.seg button{border:0;background:none;padding:6px 12px;border-radius:9px;font-size:12.5px;font-weight:600;color:var(--ink2);cursor:pointer}
+.seg button.on{background:#fff;color:var(--g1);box-shadow:0 2px 6px rgba(0,0,0,.08)}
+select,input[type=search],input[type=text],input[type=date]{font-size:13px;border:1px solid var(--line);border-radius:10px;padding:6px 10px;background:#fff;color:var(--ink)}
+input[type=search]{min-width:200px;flex:1;max-width:340px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--ink2);cursor:pointer}
+.chip.on{background:var(--g2);border-color:var(--g2);color:#fff}
+.reset{border:0;background:none;color:var(--mut);cursor:pointer;font-size:12px;text-decoration:underline}
+
+/* kpi */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;animation:up .5s .1s both}
+.kpi{padding:14px 16px;position:relative;overflow:hidden}
+.kpi .l{font-size:12px;color:var(--ink2);font-weight:600}
+.kpi .v{font-size:30px;font-weight:800;line-height:1.15;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:12px;color:var(--mut)}
+.kpi .ic{position:absolute;right:14px;top:14px;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-weight:800}
+.kpi.click{cursor:pointer}.kpi.click:hover,.kpi.on{outline:2px solid rgba(46,148,71,.45)}
+.ic.g{background:var(--good-bg);color:var(--good)}.ic.r{background:var(--bad-bg);color:var(--bad)}.ic.y{background:var(--warn-bg);color:var(--warn)}.ic.n{background:#eef2ea;color:var(--g1)}
+
+/* cards + bars */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+.card{padding:14px 16px;animation:up .5s .15s both;min-width:0}
+.card h3{margin:0 0 2px;font-size:14px}
+.card .sub{margin:0 0 10px;font-size:12px;color:var(--mut)}
+.secT{margin:20px 4px 0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--g1);font-weight:800}
+.legend{display:flex;gap:12px;font-size:12px;color:var(--ink2);margin:-4px 0 8px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.hb{display:grid;grid-template-columns:minmax(80px,36%) 1fr auto;gap:8px;align-items:center}
+.hb .lab{font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hb .lab.click{cursor:pointer;font-weight:600}
+.hb .lab.click:hover{color:var(--g2);text-decoration:underline dotted}
+.hbt{height:20px;background:#eef2ea;border-radius:99px;overflow:hidden}
+.track{height:20px;display:flex;gap:2px;transform-origin:left;animation:grow .6s cubic-bezier(.2,.8,.2,1) both}
+.bs{height:20px;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:800;min-width:0;overflow:hidden;cursor:pointer}
+.bs:first-child{border-radius:99px 0 0 99px}.bs:last-child{border-radius:0 99px 99px 0}.bs:only-child{border-radius:99px}
+.bs:hover{filter:brightness(.92)}
+.hb .val{font-size:12.5px;font-weight:800;font-variant-numeric:tabular-nums;min-width:28px;text-align:right}
+.c-ok{background:var(--good)}.c-od{background:var(--bad)}.c-gold{background:#c9a55c}.c-bl{background:#6b82d8}.c-g2{background:#5fb48a}
+.empty{color:var(--mut);font-size:12.5px;padding:8px 0}
+.donutWrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.donut{width:132px;height:132px;border-radius:50%;position:relative;flex:0 0 auto}
+.donut:after{content:"";position:absolute;inset:24px;border-radius:50%;background:#fbfcf8}
+.donut b{position:absolute;inset:0;display:grid;place-items:center;z-index:1;font-size:22px;text-align:center;line-height:1}
+.donut b small{display:block;font-size:9.5px;color:var(--mut);letter-spacing:.1em;margin-top:3px;font-weight:600}
+.dl div{display:flex;align-items:center;gap:8px;font-size:12.5px;margin:6px 0;font-weight:600}
+.dl i{width:11px;height:11px;border-radius:4px}.dl em{font-style:normal;color:var(--mut);margin-left:auto;padding-left:14px;font-weight:500}
+.agRow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ag{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.ag small{font-size:10.5px;font-weight:800;letter-spacing:.1em;color:var(--mut)}
+.ag b{display:block;font-size:26px;margin-top:2px;font-variant-numeric:tabular-nums}.ag span{font-size:11.5px;color:var(--mut)}
+
+/* follow up */
+.fuBar{padding:12px 16px;margin-top:12px;display:flex;gap:22px;flex-wrap:wrap;align-items:baseline;animation:up .5s .1s both}
+.fuBar b.n{font-size:24px}.fuBar small{color:var(--mut)}
+.tcard{margin-top:12px;padding:14px 0 6px;animation:up .5s .2s both}
+.thead{display:flex;align-items:center;gap:10px;padding:0 16px 10px;flex-wrap:wrap}
+.thead h3{margin:0;font-size:15px}.thead .cnt{color:var(--mut);font-size:12.5px}
+.tw{overflow:auto;max-height:720px}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:1120px}
+th{position:sticky;top:0;background:#f3f7f0;z-index:2;text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--ink2);padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px;border-bottom:1px solid #edf1e9;vertical-align:middle;font-size:12.5px}
+tr.po:hover td{background:#f7fbf4}
+.exp{border:0;background:none;cursor:pointer;color:var(--mut);font-size:15px;transition:transform .2s}.exp.open{transform:rotate(90deg)}
+.pono{font-weight:700;white-space:nowrap}.pono small{display:block;font-weight:600;color:var(--g1)}.pono small span{color:var(--mut);font-weight:400}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:700;color:#fff;background:#6b7a70;margin:0 4px 3px 0}
+.pill.A{background:var(--sa)}.pill.B{background:var(--sb)}.pill.C{background:var(--sc)}
+.tg{display:inline-block;padding:1px 9px;border-radius:99px;font-size:11px;font-weight:700;margin:0 4px 3px 0;border:1px solid}
+.tg.bl{background:#eef2fb;border-color:#cfd9f1;color:#3e5aa6}.tg.bd{background:#fff0e4;border-color:#f3cfa9;color:#b4561a}.tg.vh{background:#efe9fb;border-color:#d9cdf1;color:#6b4fb0}
+.sup{max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.st{display:inline-flex;gap:5px;align-items:center;padding:2px 9px;border-radius:99px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.st.bad{background:var(--bad-bg);color:var(--bad)}.st.good{background:var(--good-bg);color:var(--good)}
+.date{white-space:nowrap;font-variant-numeric:tabular-nums}.late{color:var(--bad);font-weight:600}
+td input[type=date]{width:132px;padding:4px 6px}td select{padding:4px 6px;max-width:170px;font-weight:600}td input[type=text]{width:170px;padding:4px 8px}
+.sel-n{background:#eceee9;color:#5f6b62}.sel-wa{background:#dbeaf5;color:#2f6e99}.sel-w{background:#fdf3dc;color:#8a6a1c}.sel-p{background:#efe3f7;color:#7a4fa0}.sel-s{background:#e2f2e7;color:#1d6a49}.sel-t{background:#d9efef;color:#217a7a}
+.wa{width:34px;height:34px;border-radius:10px;border:1px solid #cdebd5;background:#effaf2;display:grid;place-items:center;cursor:pointer;transition:.15s;font-size:16px}
+.wa:hover{background:#25d366;border-color:#25d366}
+.selc{width:16px;height:16px;accent-color:var(--g2)}
+tr.items td{background:#fafcf8;padding:0}
+.itbox{padding:12px 16px 16px 48px;display:grid;grid-template-columns:1.6fr 1fr;gap:18px}
+.itbox table{min-width:0}.itbox th{position:static;background:none;border:0;padding:4px 8px;font-size:11px}.itbox td{border:0;padding:4px 8px;font-size:12px}
+.prd{font-size:12.5px;margin-bottom:8px}.prd b{background:#f6f1e1;border-radius:5px;padding:1px 5px}
+.hist{margin-top:8px;font-size:12px;color:var(--ink2)}.hist div{color:var(--mut)}
+.dots{display:flex;align-items:center;margin:6px 0 2px}.dots i{width:10px;height:10px;border-radius:50%;background:#d3ddd0;display:block}.dots i.on{background:var(--g3)}.dots u{width:16px;height:2px;background:#d3ddd0;display:block}.dots u.on{background:var(--g3)}
+.dotl{font-size:11px;color:var(--mut)}
+.send{background:#eef8f0;border:1px solid #d3eada;border-radius:14px;padding:12px 14px;margin-top:10px}
+.send b{display:block;margin-bottom:2px}.send p{margin:0 0 8px;color:var(--ink2);font-size:12px}.send .row{display:flex;gap:6px;flex-wrap:wrap}
+.more{display:block;margin:10px auto}
+.saved td{animation:flash 1.2s}
+
+/* vendor view */
+.vtop{display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin:14px 0}
+.phone{max-width:560px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:28px;box-shadow:0 20px 50px rgba(40,70,40,.15);overflow:hidden}
+.phoneHead{padding:18px 20px;background:linear-gradient(135deg,var(--g3),var(--g1));color:#fff}.phoneHead b{font-size:17px}.phoneHead p{margin:4px 0 0;font-size:12px;opacity:.9}
+.phoneBody{padding:14px;display:grid;gap:12px}
+.vpo{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fbfdf8}.vpo h4{margin:0 0 6px;font-size:14px}
+.vit{display:grid;grid-template-columns:1fr 128px;gap:8px;align-items:center;padding:6px 0;border-top:1px dashed var(--line);font-size:12.5px}.vit:first-of-type{border-top:0}
+.vit small{color:var(--mut)}
+.vsel{width:100%;margin-top:8px}
+.exb{display:inline-block;border-radius:8px;padding:2px 8px;font-size:11px;font-weight:800;color:#fff}
+
+/* overlays */
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#16241a;color:#fff;padding:10px 16px;border-radius:12px;font-size:13px;opacity:0;transition:.25s;z-index:60;max-width:90vw;pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%)}#toast.err{background:var(--bad)}
+.modal{position:fixed;inset:0;background:rgba(20,36,26,.35);display:none;align-items:center;justify-content:center;z-index:70;padding:16px}.modal.show{display:flex}
+.modal .box{width:min(580px,100%);padding:20px 22px;animation:up .3s both;background:#fff;max-height:90vh;overflow:auto}
+.modal h3{margin:0 0 6px}.modal p.n{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+.modal pre{white-space:pre-wrap;background:#f4f8f1;border:1px solid var(--line);border-radius:12px;padding:12px;font:13px/1.5 inherit;margin:0 0 10px}
+.modal .row{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.loading{position:fixed;inset:0;display:none;place-items:center;z-index:80;background:rgba(240,245,236,.7)}.loading.show{display:grid}
+.loading div{display:flex;gap:10px;align-items:center;font-weight:600;color:var(--g1)}
+.spn{width:22px;height:22px;border:3px solid #cfe2c5;border-top-color:var(--g2);border-radius:50%;animation:spin .8s linear infinite;display:inline-block}
+.note{font-size:12px;color:var(--mut);margin:0 4px 10px}
+
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.grid3{grid-template-columns:1fr 1fr}.itbox{grid-template-columns:1fr}}
+@media(max-width:720px){.kpis{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr}.asof{text-align:left}.wrap{padding:12px 12px 30px}.agRow{grid-template-columns:1fr}}
+@media print{body{background:#fff}.noprint,.filters,.thead button,.more{display:none!important}.glass{box-shadow:none;backdrop-filter:none;border:1px solid #ddd;break-inside:avoid}.tw{max-height:none;overflow:visible}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="loading" id="loading"><div><span class="spn"></span>Menyinkronkan data dari ERP…</div></div>
+
+<div class="wrap">
+  <header class="glass top">
+    <div class="logo">SCM</div>
+    <div class="ttl"><h1>Outstanding Open Order</h1><p>Expediting Control · Supply Chain Management · SCM Expeditor System (demo)</p></div>
+    <div class="sp"></div>
+    <label class="me noprint">Anda: <select id="me"></select></label>
+    <div class="asof">Data per<b id="asof">–</b></div>
+    <a class="btn noprint" href="../index.html">← Portofolio</a>
+    <button type="button" class="btn noprint" id="pdf">🖨 PDF</button>
+    <button type="button" class="btn noprint" id="dl">⬇ Unduh Excel</button>
+    <button type="button" class="btn primary noprint" id="upd">⟳ Perbarui data</button>
+  </header>
+
+  <nav class="glass tabbar noprint" id="tabs" role="tablist" aria-label="Halaman">
+    <button class="tab on" role="tab" data-t="dash"><span class="ti">▦</span><span class="tl">Dashboard</span></button>
+    <button class="tab" role="tab" data-t="po"><span class="ti">☰</span><span class="tl">Follow Up PO</span><b class="bd" id="bdPo"></b></button>
+    <button class="tab" role="tab" data-t="vendor"><span class="ti">🔗</span><span class="tl">Link Vendor</span></button>
+  </nav>
+
+  <section class="glass filters noprint" id="filters">
+    <div class="seg" id="sites"></div>
+    <select id="by" aria-label="Filter Buyer"></select>
+    <input type="search" id="q" placeholder="Cari apa saja: PO, item, supplier, VHS…" aria-label="Cari">
+    <div class="chips" id="quick"></div>
+    <button type="button" class="reset" id="reset">Reset filter</button>
+  </section>
+  <p class="note">Semua data pada halaman ini fiktif dan dibuat di browser Anda. Coba ubah ETA, status, atau kirim WA: status ikut berubah otomatis.</p>
+
+  <div id="vDash" class="view">
+    <section class="kpis" id="kpis"></section>
+    <div class="secT">Status &amp; beban</div>
+    <section class="grid3">
+      <div class="glass card"><h3>Status per site</h3><p class="sub">Jumlah item · klik bar untuk memfilter</p><div class="legend"><span><i class="c-od"></i>⚠ Overdue</span><span><i class="c-ok"></i>✓ On Progress</span></div><div id="c1"></div></div>
+      <div class="glass card"><h3>Jatuh tempo ETA</h3><p class="sub">Jumlah item menurut jarak ke ETA</p><div id="c2"></div></div>
+      <div class="glass card"><h3>Barang masuk per bulan</h3><p class="sub">Jumlah item menurut bulan ETA Aktual (diisi expeditor)</p><div id="c3"></div></div>
+    </section>
+    <div class="secT">Buyer &amp; aging</div>
+    <section class="grid3">
+      <div class="glass card"><h3>Per Buyer</h3><p class="sub">Klik nama untuk memfilter</p><div class="legend"><span><i class="c-ok"></i>✓ On Progress</span><span><i class="c-od"></i>⚠ Overdue</span></div><div id="c4"></div></div>
+      <div class="glass card"><h3>Rata-rata Aging</h3><p class="sub">Hari sejak PO dibuat · PO terbuka</p><div class="agRow" id="ag"></div><h3 style="margin-top:16px">Porsi beban per site</h3><p class="sub">Dari seluruh item terbuka</p><div id="don"></div></div>
+      <div class="glass card"><h3>Prioritas</h3><p class="sub">Breakdown, backlog dan VHS (jumlah PO)</p><div id="c7"></div></div>
+    </section>
+    <div class="secT">Departemen &amp; supplier</div>
+    <section class="grid3" style="grid-template-columns:1fr 1fr">
+      <div class="glass card"><h3>User Department</h3><p class="sub">Jumlah item</p><div id="c5"></div></div>
+      <div class="glass card"><h3>Supplier</h3><p class="sub">Jumlah item</p><div id="c6"></div></div>
+    </section>
+  </div>
+
+  <div id="vPo" class="view hide">
+    <section class="glass fuBar" id="fu"></section>
+    <section class="glass tcard">
+      <div class="thead"><h3>Follow Up PO</h3><span class="cnt" id="cnt"></span><div class="sp"></div>
+        <select id="sort" aria-label="Urutkan"><option value="new">Tanggal PO terbaru</option><option value="old">Tanggal PO terlama</option><option value="eta">ETA terdekat</option><option value="age">Aging tertinggi</option></select>
+        <button type="button" class="btn" id="exBulk" disabled>⬇ Export Excel (0)</button>
+        <button type="button" class="btn" id="lkBulk" disabled>🔗 Link vendor (0)</button>
+        <button type="button" class="btn" id="waBulk" disabled>WA gabungan (0)</button></div>
+      <div class="tw"><table>
+        <thead><tr><th></th><th><input type="checkbox" class="selc" id="selAll" title="Pilih semua yang tampil" aria-label="Pilih semua"></th>
+          <th>Site · PO</th><th>Supplier</th><th>Buyer</th><th>ETA Vendor</th><th>ETA Aktual</th><th>Aging</th><th>Status</th><th>Status terbaru</th><th>Keterangan</th><th>WA</th></tr></thead>
+        <tbody id="tb"></tbody></table></div>
+      <button type="button" class="btn more" id="more">Tampilkan lebih banyak</button>
+    </section>
+  </div>
+
+  <div id="vVendor" class="view hide"></div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="modal"><div class="glass box" id="mbox"></div></div>
+
+<script>
+(function(){
+var $=function(id){return document.getElementById(id)};
+var BLN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+var DAY=864e5;
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+var today=new Date();today.setHours(0,0,0,0);
+var addD=function(d,n){return new Date(d.getTime()+n*DAY)};
+var dif=function(a,b){return Math.round((a-b)/DAY)};
+var fmt=function(d){return d?d.getDate()+' '+BLN[d.getMonth()]+(d.getFullYear()!==today.getFullYear()?' '+d.getFullYear():''):''};
+var z=function(n){return String(n).padStart(2,'0')};
+var iso=function(d){return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())};
+var fmtT=function(d){return fmt(d)+' '+z(d.getHours())+':'+z(d.getMinutes())};
+var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+var copy=function(t){try{navigator.clipboard.writeText(t).catch(function(){})}catch(e){}};
+var tt;function toast(t,err){var el=$('toast');el.textContent=t;el.className=err?'err show':'show';clearTimeout(tt);tt=setTimeout(function(){el.className=''},err?4500:2600)}
+function modal(h){$('mbox').innerHTML=h;$('modal').classList.add('show')}
+function closeModal(){$('modal').classList.remove('show')}
+
+/* ---------- dummy data ---------- */
+var seed=20261112;function rnd(){seed=(seed*1664525+1013904223)%4294967296;return seed/4294967296}
+function ri(a,b){return a+Math.floor(rnd()*(b-a+1))}
+function pick(a){return a[Math.floor(rnd()*a.length)]}
+var SITES=['SITE A','SITE B','SITE C'];
+var BUYERS=['Andi Pratama','Sari Wulandari','Budi Santoso','Citra Lestari','Dewi Anggraini','Eko Prasetyo'];
+var EXPEDITORS=['Rudi','Abi','Dina'];
+var DEPTS=['Maintenance Planner','Logistic','HR &amp; General Admin','Port','Mine Engineer','Business Development','Geology'];
+var VENDORS=[{n:'PT Demo Supplier',pic:'Roni',tel:'+62 812-0000-0101'},{n:'CV Sample Partner',pic:'Tina',tel:'+62 812-0000-0102'},{n:'PT Fictional Vendor',pic:'Heru',tel:'+62 812-0000-0103'},{n:'PT Contoh Mandiri',pic:'Lia',tel:'+62 812-0000-0104'},{n:'CV Example Parts',pic:'Joko',tel:'+62 812-0000-0105'},{n:'PT Mock Industrial',pic:'Maya',tel:'+62 812-0000-0106'},{n:'PT Sampel Teknik',pic:'Ucok',tel:'+62 812-0000-0107'}];
+var EXPS={'JNE':'#c4443c','J&T':'#d6872a','SiCepat':'#b53d6b','Cargo Darat':'#4a7a5c','Kurir Vendor':'#5b6fa6'};
+var ITEMS=['Filter, Oil','Filter, Fuel','Hose, Hydraulic','Bearing, Ball','Gasket Set','Belt, V','Seal Kit','Bolt &amp; Nut Set','Pump, Water','Sensor, Pressure','Cable, Power','Coupling, Flex','Lamp, LED','Glove, Safety'];
+var BRANDS=['Alpha','Delta','Orion','Vertex','Nova'];
+var PRD=['Service unit DT 12 ganti filter','Stok LV 04 minimum','Perbaikan BLC 3 line hydraulic','Breakdown DT 07 pompa','VHS 2 unit penggantian','Restock gudang umum','Overhaul BLC 1 komponen','Cadangan LV 02','Pengadaan APD karyawan site'];
+var STS=[['none','Belum di follow up','sel-n'],['wa','Sudah di-WA','sel-wa'],['wait','Menunggu vendor','sel-w'],['pick','Pick up Part','sel-p'],['ship','Waiting Shipment','sel-s'],['transit','In Transit','sel-t']];
+var STM={};STS.forEach(function(s){STM[s[0]]=s});
+var POS=[];
+(function gen(){
+  for(var i=0;i<72;i++){
+    var poDate=addD(today,-ri(1,45)),ship=ri(3,24),vendor=pick(VENDORS);
+    var r=rnd(),status=r<.34?'none':r<.52?'wa':r<.62?'wait':r<.68?'pick':r<.92?'ship':'transit';
+    var tg=rnd(),tag=tg<.12?'bd':tg<.3?'bl':tg<.4?'vh':'';
+    var p={no:'PO.2026.11.'+z(i+1).padStart(4,'0'),poDate:poDate,etaV:addD(poDate,ship+2),vendor:vendor.n,buyer:pick(BUYERS),site:pick(SITES),
+      dept:pick(DEPTS),cat:rnd()<.78?'Goods':'Service',tag:tag,pr:pick(PRD),status:status,opened:false,exp:null,note:'',hist:[],etaA:null,
+      items:[]};
+    var n=ri(1,4);for(var k=0;k<n;k++)p.items.push({n:pick(ITEMS),b:pick(BRANDS),pn:ri(1000,9999)+'-'+ri(10000,99999),q:ri(1,12),etaA:null});
+    if(status==='ship'||status==='transit'){var e=addD(today,ri(0,8));p.items.forEach(function(it){it.etaA=e});}
+    if(status==='transit')p.exp=pick(Object.keys(EXPS));
+    if(status==='wa')p.opened=rnd()<.4;
+    if(status!=='none'){var d=rnd(),dd=d<.35?0:d<.65?1:ri(2,6),who=pick(EXPEDITORS);
+      var t=addD(today,-dd);t.setHours(ri(8,16),ri(0,59));p.hist.push({t:t,who:who,text:'Status → '+STM[status][1],fu:true});}
+    if(rnd()<.18)p.note=pick(['Tunggu konfirmasi stok','Vendor minta DP','Barang indent','Menunggu dokumen']);
+    sync(p);POS.push(p);
+  }
+})();
+function sync(p){var s=p.items.filter(function(i){return i.etaA});p.etaA=(s.length===p.items.length&&s.length)?new Date(Math.max.apply(null,s.map(function(i){return +i.etaA}))):null;p.partial=s.length>0&&s.length<p.items.length}
+function due(p){return p.etaA||p.etaV}
+function iDue(p,it){return it.etaA||p.etaV}
+function isOver(p){return today>due(p)}
+function iOver(p,it){return today>iDue(p,it)}
+function needFU(p){var d=dif(p.etaV,today);return !p.etaA&&d>=0&&d<=1}
+function aging(p){return dif(today,p.poDate)}
+
+/* ---------- state ---------- */
+var S={tab:'dash',site:'ALL',by:'',q:'',quick:'',sort:'new',vv:VENDORS[0].n},shown=60,open={},picked={},asof=new Date(),flashKey='';
+var me=function(){return store.get('scm_nama')||EXPEDITORS[0]};
+function addHist(p,text,fu){p.hist.unshift({t:new Date(),who:me(),text:text,fu:!!fu})}
+
+/* ---------- filters ---------- */
+var QUICK=[['overdue','⚠ Overdue'],['bl','Backlog'],['bd','Breakdown'],['vh','VHS'],['confirm','ETA perlu konfirmasi'],['none','Belum di follow up'],['soon','Due Soon ≤ 7 hari']];
+function match(p){
+  if(S.site!=='ALL'&&p.site!==S.site)return false;
+  if(S.by&&p.buyer!==S.by)return false;
+  var k=S.quick;
+  if(k==='overdue'&&!isOver(p))return false;
+  if((k==='bl'||k==='bd'||k==='vh')&&p.tag!==k)return false;
+  if(k==='confirm'&&!needFU(p))return false;
+  if(k==='none'&&p.status!=='none')return false;
+  if(k==='soon'){var d=dif(due(p),today);if(d<0||d>7)return false}
+  var q=S.q.toLowerCase().trim();
+  if(q){var t=[p.no,p.vendor,p.buyer,p.site,p.pr,p.dept,p.cat,p.note,p.tag==='bl'?'backlog':p.tag==='bd'?'breakdown':p.tag==='vh'?'vhs':''].concat(p.items.map(function(i){return i.n+' '+i.b+' '+i.pn})).join(' ').toLowerCase();
+    if(t.replace(/&amp;/g,'&').indexOf(q)<0)return false}
+  return true;
+}
+function setQuick(k){S.quick=S.quick===k?'':k;shown=60;render()}
+function buildFilters(){
+  $('sites').innerHTML=['ALL'].concat(SITES).map(function(s){return '<button data-site="'+s+'" class="'+(S.site===s?'on':'')+'">'+(s==='ALL'?'Semua site':s)+'</button>'}).join('');
+  $('by').innerHTML='<option value="">Semua Buyer</option>'+BUYERS.map(function(b){return '<option'+(S.by===b?' selected':'')+'>'+b+'</option>'}).join('');
+  $('quick').innerHTML=QUICK.map(function(q){return '<button type="button" class="chip'+(S.quick===q[0]?' on':'')+'" data-q="'+q[0]+'">'+q[1]+'</button>'}).join('');
+  $('me').innerHTML=EXPEDITORS.map(function(n){return '<option'+(me()===n?' selected':'')+'>'+n+'</option>'}).join('');
+}
+
+/* ---------- dashboard ---------- */
+function hb(el,rows,opt){
+  opt=opt||{};
+  if(!rows.length){$(el).innerHTML='<div class="empty">Tidak ada data</div>';return}
+  var mx=Math.max.apply(null,rows.map(function(r){return r.tot}))||1;
+  $(el).innerHTML='<div class="hb">'+rows.map(function(r){
+    var w=Math.max(r.tot/mx*100,8);
+    return '<div class="lab'+(r.f?' click':'')+'" '+(r.f?'data-f="'+r.f+'" data-v="'+esc(r.raw||r.l)+'"':'')+' title="'+esc(String(r.l).replace(/&amp;/g,'&'))+'">'+r.l+'</div>'+
+      '<div class="hbt"><div class="track" style="width:'+w+'%">'+r.segs.filter(function(s){return s.v>0}).map(function(s){return '<div class="bs '+s.c+'" style="flex:'+s.v+'" title="'+esc(s.t||'')+'" '+(s.q?'data-q="'+s.q+'"':'')+'>'+s.v+'</div>'}).join('')+'</div></div>'+
+      '<div class="val">'+r.tot+'</div>'}).join('')+'</div>';
+}
+function stack(list,keyFn,labFn,filterKey,n){
+  var m={};list.forEach(function(x){var k=keyFn(x);(m[k]=m[k]||{o:0,k:0})[iOver(x.p,x.it)?'o':'k']++});
+  return Object.keys(m).map(function(k){var v=m[k];return {l:labFn?labFn(k):k,raw:k,f:filterKey,tot:v.o+v.k,segs:[{v:v.k,c:'c-ok',t:'On progress'},{v:v.o,c:'c-od',t:'Overdue',q:'overdue'}]}}).sort(function(a,b){return b.tot-a.tot}).slice(0,n||8);
+}
+function dashboard(P){
+  var R=[];P.forEach(function(p){p.items.forEach(function(it){R.push({p:p,it:it})})});
+  var over=R.filter(function(x){return iOver(x.p,x.it)}).length,prog=R.length-over;
+  var noFu=P.filter(function(p){return p.status==='none'}).length;
+  var avg=function(a){return a.length?(a.reduce(function(s,p){return s+aging(p)},0)/a.length).toFixed(1):'0.0'};
+  var K=[['Total item',R.length,P.length+' PO','n','▤',''],['Overdue',over,Math.round(over/(R.length||1)*100)+'% dari item','r','⚠','overdue'],['On Progress',prog,'masih dalam jadwal','g','✓',''],['Belum di follow up',noFu,'PO','y','…','none'],['Rata-rata aging',avg(P),'hari · PO terbuka','n','⏱','']];
+  $('kpis').innerHTML=K.map(function(k){return '<div class="glass kpi'+(k[5]?' click':'')+(S.quick===k[5]&&k[5]?' on':'')+'" '+(k[5]?'data-q="'+k[5]+'"':'')+'><div class="ic '+k[3]+'">'+k[4]+'</div><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div><div class="s">'+k[2]+'</div></div>'}).join('');
+  hb('c1',stack(R,function(x){return x.p.site},null,'site'),0);
+  // jatuh tempo buckets
+  var B=[['Overdue > 30 hari',function(d){return d<-30},'c-od'],['Overdue 8–30 hari',function(d){return d>=-30&&d<-7},'c-od'],['Overdue 1–7 hari',function(d){return d>=-7&&d<0},'c-od'],['0–7 hari lagi',function(d){return d>=0&&d<=7},'c-ok'],['8–30 hari lagi',function(d){return d>7&&d<=30},'c-ok'],['> 30 hari lagi',function(d){return d>30},'c-ok']];
+  hb('c2',B.map(function(b){var n=R.filter(function(x){return b[1](dif(iDue(x.p,x.it),today))}).length;return {l:b[0],tot:n,segs:[{v:n,c:b[2],t:b[0]}]}}),0);
+  var mon=[-1,0,1,2].map(function(o){var m=new Date(today.getFullYear(),today.getMonth()+o,1),n=R.filter(function(x){var d=iDue(x.p,x.it);return d.getFullYear()===m.getFullYear()&&d.getMonth()===m.getMonth()}).length;return {l:BLN[m.getMonth()]+' '+m.getFullYear(),tot:n,segs:[{v:n,c:o===0?'c-gold':'c-g2',t:'Item'}]}});
+  hb('c3',mon,0);
+  hb('c4',stack(R,function(x){return x.p.buyer},null,'by'));
+  var ag=[['ALL',P],['GOODS',P.filter(function(p){return p.cat==='Goods'})],['SERVICE',P.filter(function(p){return p.cat==='Service'})]];
+  $('ag').innerHTML=ag.map(function(a){return '<div class="ag"><small>'+a[0]+'</small><b>'+avg(a[1])+'</b><span>hari · '+a[1].length+' PO</span></div>'}).join('');
+  var cols=['#4f6bd8','#1a9a85','#d9822b'],tot=R.length||1,acc=0,gr=[];
+  SITES.forEach(function(s,i){var n=R.filter(function(x){return x.p.site===s}).length,a=acc/tot*100;acc+=n;gr.push(cols[i]+' '+a+'% '+acc/tot*100+'%')});
+  $('don').innerHTML='<div class="donutWrap"><div class="donut" style="background:conic-gradient('+(gr.join(',')||'#e1e8da 0 100%')+')"><b><span>'+R.length+'<small>ITEM</small></span></b></div><div class="dl">'+SITES.map(function(s,i){var n=R.filter(function(x){return x.p.site===s}).length;return '<div><i style="background:'+cols[i]+'"></i>'+s+'<em>'+n+' · '+Math.round(n/tot*100)+'%</em></div>'}).join('')+'</div></div>';
+  var pr=[['Breakdown','bd','c-od'],['Backlog','bl','c-bl'],['VHS','vh','c-gold']].map(function(t){var n=P.filter(function(p){return p.tag===t[1]}).length;return {l:t[0],tot:n,segs:[{v:n,c:t[2],t:t[0],q:t[1]}]}});
+  hb('c7',pr);
+  hb('c5',stack(R,function(x){return x.p.dept}));
+  hb('c6',stack(R,function(x){return x.p.vendor}));
+}
+
+/* ---------- follow up ---------- */
+function followStats(P){
+  function cnt(dayOff){var m={},set={};
+    POS.forEach(function(p){p.hist.forEach(function(h){if(h.fu&&dif(new Date(h.t.getFullYear(),h.t.getMonth(),h.t.getDate()),today)===dayOff){var k=p.no+'|'+h.who;if(!set[k]){set[k]=1;m[h.who]=(m[h.who]||0)+1}}})});
+    var total=0,parts=[];Object.keys(m).forEach(function(w){total+=m[w];parts.push(w+' '+m[w])});return {n:total,s:parts.join(' · ')}}
+  var a=cnt(0),b=cnt(-1),y=addD(today,-1);
+  $('fu').innerHTML='<div><small>Follow up hari ini</small><br><b class="n">'+a.n+'</b> PO <small>('+(a.s||'belum ada')+')</small></div><div><small>Kemarin ('+z(y.getDate())+'/'+z(y.getMonth()+1)+')</small><br><b class="n">'+b.n+'</b> PO <small>('+(b.s||'–')+')</small></div><div><small>Perlu konfirmasi ETA</small><br><b class="n" style="color:var(--warn)">'+P.filter(needFU).length+'</b> PO <small>(H-1 ETA belum ada konfirmasi)</small></div>';
+}
+function codeB(t){return esc(t).replace(/\b(BLC|BD|DT|LV|VHS)\s?\d*/g,function(m){return '<b>'+m+'</b>'}).replace(/&amp;amp;/g,'&amp;')}
+function tagHtml(p){return p.tag?'<span class="tg '+p.tag+'">'+{bl:'Backlog',bd:'Breakdown',vh:'VHS'}[p.tag]+'</span>':''}
+function stSel(p){return '<select data-f="status" class="'+STM[p.status][2]+'">'+STS.map(function(s){return '<option value="'+s[0]+'"'+(s[0]===p.status?' selected':'')+'>'+s[1]+'</option>'}).join('')+'</select>'}
+function dots(p){var s=({none:0,wa:p.opened?2:1,wait:2,pick:3,ship:3,transit:4})[p.status];var l=['Belum dikirim','Link terkirim','Link dibuka','ETA diisi','Dalam pengiriman'][s];
+  return '<div class="dots">'+[1,2,3,4].map(function(i){return (i>1?'<u class="'+(s>=i?'on':'')+'"></u>':'')+'<i class="'+(s>=i?'on':'')+'"></i>'}).join('')+'</div><div class="dotl">'+l+(p.exp?' · <span class="exb" style="background:'+EXPS[p.exp]+'">'+p.exp+'</span>':'')+'</div>'}
+function rowHtml(p){
+  var d=due(p),ov=isOver(p),isO=!!open[p.no];
+  var etaA=p.partial?'<span class="late" style="color:var(--warn)">sebagian ('+p.items.filter(function(i){return i.etaA}).length+'/'+p.items.length+')</span>':'<input type="date" data-f="etaA" value="'+(p.etaA?iso(p.etaA):'')+'" aria-label="ETA Aktual">';
+  var main='<tr class="po" data-no="'+p.no+'"><td><button class="exp'+(isO?' open':'')+'" data-x="1" aria-label="Detail">›</button></td>'+
+   '<td><input type="checkbox" class="selc" data-pick="1"'+(picked[p.no]?' checked':'')+' aria-label="Pilih '+p.no+'"></td>'+
+   '<td><span class="pill '+p.site.slice(-1)+'">'+p.site+'</span>'+tagHtml(p)+'<div class="pono">'+p.no+'<small>'+p.cat+' <span>· '+p.items.length+' item</span></small></div></td>'+
+   '<td><div class="sup" title="'+esc(p.vendor)+'">'+esc(p.vendor)+'</div></td><td>'+esc(p.buyer)+'</td>'+
+   '<td class="date'+(ov&&!p.etaA?' late':'')+'">'+fmt(p.etaV)+'</td><td>'+etaA+'</td><td class="date">'+aging(p)+' hr</td>'+
+   '<td><span class="st '+(ov?'bad':'good')+'">'+(ov?'⚠ Overdue '+(-dif(d,today))+' hr':'✓ On Progress')+'</span></td>'+
+   '<td>'+stSel(p)+'</td><td><input type="text" data-f="note" value="'+esc(p.note)+'" placeholder="Keterangan…" aria-label="Keterangan"></td>'+
+   '<td><button class="wa" data-wa="1" title="Kirim WhatsApp" aria-label="WhatsApp">💬</button></td></tr>';
+  if(!isO)return main;
+  var v=VENDORS.filter(function(x){return x.n===p.vendor})[0];
+  var its='<table><thead><tr><th>Item</th><th>Merek · Part No.</th><th>Qty</th><th>ETA Aktual per item</th></tr></thead><tbody>'+p.items.map(function(it,i){return '<tr data-i="'+i+'"><td><b>'+it.n+'</b></td><td>'+it.b+' · '+it.pn+'</td><td>'+it.q+'</td><td><input type="date" data-f="itemEta" value="'+(it.etaA?iso(it.etaA):'')+'"></td></tr>'}).join('')+'</tbody></table>';
+  var h=p.hist.length?'<div class="hist"><b>Riwayat</b>'+p.hist.slice(0,5).map(function(x){return '<div>'+fmtT(x.t)+' · '+esc(x.who)+': '+esc(x.text)+'</div>'}).join('')+'</div>':'';
+  return main+'<tr class="items" data-no="'+p.no+'"><td colspan="12"><div class="itbox"><div><div class="prd">PR: '+codeB(p.pr)+' <span style="color:var(--mut)">· '+p.dept+'</span></div>'+its+h+'</div>'+
+   '<div><b>Progres vendor</b>'+dots(p)+'<div class="send"><b>Kirim ke vendor</b><p>Kepada: '+v.pic+' · '+v.tel+'</p><div class="row"><button class="btn primary" data-wa="1">Kirim WhatsApp</button><button class="btn" data-copy="1">Salin pesan</button><button class="btn blue" data-link="1">🔗 Link vendor</button></div></div></div></div></td></tr>';
+}
+function sortFn(){return {new:function(a,b){return b.poDate-a.poDate},old:function(a,b){return a.poDate-b.poDate},eta:function(a,b){return due(a)-due(b)},age:function(a,b){return aging(b)-aging(a)}}[S.sort]}
+function poView(P){
+  followStats(P);
+  var L=P.slice().sort(sortFn());
+  $('cnt').textContent=L.length+' PO · '+({new:'Tanggal PO terbaru',old:'Tanggal PO terlama',eta:'ETA terdekat',age:'Aging tertinggi'})[S.sort];
+  $('tb').innerHTML=L.slice(0,shown).map(rowHtml).join('')||'<tr><td colspan="12" style="padding:30px;text-align:center;color:var(--mut)">Tidak ada PO yang cocok dengan filter.</td></tr>';
+  $('more').style.display=L.length>shown?'':'none';
+  var all=L.length&&L.slice(0,shown).every(function(p){return picked[p.no]});$('selAll').checked=!!all;
+  bulkBtn();
+  if(flashKey){var r=document.querySelector('tr.po[data-no="'+flashKey+'"]');if(r)r.classList.add('saved');flashKey=''}
+}
+function pickedList(){return POS.filter(function(p){return picked[p.no]})}
+function bulkBtn(){var n=pickedList().length;['exBulk','lkBulk','waBulk'].forEach(function(id){$(id).disabled=!n});$('exBulk').textContent='⬇ Export Excel ('+n+')';$('lkBulk').textContent='🔗 Link vendor ('+n+')';$('waBulk').textContent='WA gabungan ('+n+')'}
+
+/* ---------- vendor view ---------- */
+function vendorView(){
+  var v=VENDORS.filter(function(x){return x.n===S.vv})[0],mine=POS.filter(function(p){return p.vendor===S.vv});
+  mine.forEach(function(p){if(p.status==='wa')p.opened=true});
+  $('vVendor').innerHTML='<div class="vtop glass" style="padding:12px 16px"><div><small style="color:var(--mut)">Lihat sebagai vendor</small><br><select id="vsel">'+VENDORS.map(function(x){return '<option'+(x.n===S.vv?' selected':'')+'>'+x.n+'</option>'}).join('')+'</select></div><span class="note" style="margin:0;max-width:460px">Tampilan yang dibuka vendor dari link WhatsApp: hanya mengisi ETA per item dan ekspedisi. Link berlaku 2 hari. Tanggal yang sudah lewat dianggap barang diterima.</span></div>'+
+  '<div class="phone"><div class="phoneHead"><b>'+esc(S.vv)+'</b><p>Konfirmasi jadwal kirim · link berlaku 2 hari · untuk '+v.pic+'</p></div><div class="phoneBody">'+
+  (mine.map(function(p){return '<div class="vpo" data-no="'+p.no+'"><h4>'+p.no+' <span class="st '+(isOver(p)?'bad':'good')+'" style="float:right">'+(isOver(p)?'Overdue':'On Progress')+'</span></h4><small style="color:var(--mut)">'+p.site+' · PO '+fmt(p.poDate)+'</small>'+
+    p.items.map(function(it,i){return '<div class="vit" data-i="'+i+'"><div><b>'+it.n+'</b><br><small>'+it.b+' · '+it.pn+' · Qty '+it.q+'</small></div><input type="date" value="'+(it.etaA?iso(it.etaA):'')+'"></div>'}).join('')+
+    '<select class="vsel"><option value="">Ekspedisi — pilih —</option>'+Object.keys(EXPS).map(function(x){return '<option'+(p.exp===x?' selected':'')+'>'+x+'</option>'}).join('')+'</select></div>'}).join('')||'<div class="empty">Tidak ada PO terbuka untuk vendor ini.</div>')+
+  (mine.length?'<button class="btn primary" id="vsend" style="justify-content:center;padding:13px">Kirim konfirmasi</button>':'')+'</div></div>';
+}
+
+/* ---------- render ---------- */
+function render(){
+  buildFilters();
+  ['dash','po','vendor'].forEach(function(t){$({dash:'vDash',po:'vPo',vendor:'vVendor'}[t]).classList.toggle('hide',S.tab!==t)});
+  document.querySelectorAll('#tabs button').forEach(function(b){var on=b.dataset.t===S.tab;b.classList.toggle('on',on);b.setAttribute('aria-selected',on)});
+  $('filters').classList.toggle('hide',S.tab==='vendor');
+  $('asof').textContent=fmtT(asof);
+  var P=POS.filter(match);
+  $('bdPo').textContent=P.length;
+  if(S.tab==='dash')dashboard(P);else if(S.tab==='po')poView(P);else vendorView();
+}
+
+/* ---------- actions ---------- */
+function deliver(p,why){POS.splice(POS.indexOf(p),1);delete picked[p.no];toast(p.no+' '+why+' dan keluar dari daftar (sama seperti saat diterima di ERP)')}
+function setEta(p,idx,val){
+  var dt=val?new Date(val+'T00:00:00'):null;
+  if(dt&&dt<today){deliver(p,'diterima (ETA sudah lewat)');return true}
+  (idx==null?p.items:[p.items[idx]]).forEach(function(it){it.etaA=dt});sync(p);
+  addHist(p,'ETA aktual → '+(dt?fmt(dt)+(idx!=null?' (item '+(idx+1)+')':''):'dikosongkan'),true);
+  if(dt&&(p.status==='none'||p.status==='wa'||p.status==='wait')){p.status='ship';addHist(p,'Status otomatis → Waiting Shipment',false)}
+  return false;
+}
+function waText(list){
+  var out='Selamat pagi Bapak/Ibu,\n\nMohon update PO '+list.map(function(p){return p.no}).join(', ')+' dengan item:\n\n';
+  out+=list.map(function(p){return p.no+':\n'+p.items.map(function(i){return '• '+i.n.replace(/&amp;/g,'&')+' · '+i.b+' · '+i.pn}).join('\n')}).join('\n\n');
+  return out+'\n\nSudah sampai mana prosesnya ya? Terima kasih.';
+}
+function markWa(list,how){list.forEach(function(p){if(p.status==='none'||p.status==='wait'){p.status='wa'}addHist(p,how,true)})}
+function vendorGroups(list){var m={};list.forEach(function(p){(m[p.vendor]=m[p.vendor]||[]).push(p)});return m}
+function waModal(list){
+  var g=vendorGroups(list),keys=Object.keys(g);
+  modal('<h3>Kirim WhatsApp</h3><p class="n">'+(keys.length>1?keys.length+' vendor dipilih: satu pesan gabungan per vendor.':'Pesan gabungan untuk satu vendor.')+' Saat dikirim, status otomatis menjadi “Sudah di-WA”. (Demo: tidak membuka WhatsApp.)</p>'+
+    keys.map(function(k){var v=VENDORS.filter(function(x){return x.n===k})[0];return '<b style="font-size:12px">Kepada: '+v.pic+' · '+v.tel+' ('+esc(k)+')</b><pre>'+esc(waText(g[k]))+'</pre>'}).join('')+
+    '<div class="row"><button class="btn" id="mc">Tutup</button><button class="btn" id="mcp">Salin pesan</button><button class="btn primary" id="mok">Kirim WhatsApp</button></div>');
+  $('mc').onclick=closeModal;
+  $('mcp').onclick=function(){copy(keys.map(function(k){return waText(g[k])}).join('\n\n----\n\n'));toast('Pesan disalin')};
+  $('mok').onclick=function(){markWa(list,'WhatsApp terkirim');closeModal();toast('Status diubah menjadi Sudah di-WA ('+list.length+' PO)');render()};
+}
+function linkModal(list){
+  var g=vendorGroups(list),keys=Object.keys(g);
+  var url=function(k){return 'https://example.com/v/'+btoa(k).replace(/[^a-z0-9]/gi,'').slice(0,10).toLowerCase()};
+  modal('<h3>Link vendor</h3><p class="n">Link khusus per vendor, berlaku 2 hari. Vendor hanya mengisi ETA per PO dan item. Menyalin link menandai status “Sudah di-WA”.</p>'+keys.map(function(k){return '<pre><b>'+esc(k)+'</b>\n'+url(k)+'  (berlaku 2 hari)</pre>'}).join('')+
+    '<div class="row"><button class="btn" id="mc">Tutup</button><button class="btn primary" id="mok">Salin link</button></div>');
+  $('mc').onclick=closeModal;
+  $('mok').onclick=function(){copy(keys.map(function(k){return k+': '+url(k)}).join('\n'));markWa(list,'Link vendor disalin');closeModal();toast('Link disalin (demo). Status: Sudah di-WA');render()};
+}
+function csv(rows,name){
+  var s='﻿'+rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"'}).join(';')}).join('\r\n');
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([s],{type:'text/csv;charset=utf-8'}));a.download=name;document.body.appendChild(a);a.click();a.remove();
+}
+function exportVendors(list){
+  var g=vendorGroups(list);
+  Object.keys(g).forEach(function(k){
+    var rows=[['No PO','Tanggal PO','Vendor','Item','Site','Qty','ETA (diisi vendor)']];
+    g[k].sort(function(a,b){return a.poDate-b.poDate}).forEach(function(p){p.items.forEach(function(i){rows.push([p.no,iso(p.poDate),k,i.n.replace(/&amp;/g,'&')+' · '+i.b+' · '+i.pn,p.site,i.q,''])})});
+    csv(rows,'Konfirmasi ETA - '+k+' - '+fmt(today)+'.csv');
+  });
+  toast('File dummy diunduh: satu file per vendor (CSV, buka di Excel)');
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',function(e){
+  var t=e.target,b;
+  if((b=t.closest('#tabs button'))){
+    if(S.tab!==b.dataset.t){S.tab=b.dataset.t;render();var v=$({dash:'vDash',po:'vPo',vendor:'vVendor'}[S.tab]);v.classList.remove('swap');void v.offsetWidth;v.classList.add('swap');window.scrollTo({top:0,behavior:'smooth'})}
+    return}
+  if((b=t.closest('#sites button'))){S.site=b.dataset.site;shown=60;render();return}
+  if((b=t.closest('#quick .chip'))){setQuick(b.dataset.q);return}
+  if((b=t.closest('.kpi.click'))){setQuick(b.dataset.q);return}
+  if((b=t.closest('.bs[data-q]'))){if(S.tab==='dash'){var q=b.dataset.q;if(q==='overdue'){S.quick='overdue'}else S.quick=q;S.tab='po';render()}return}
+  if((b=t.closest('.lab.click'))){var f=b.dataset.f,v=b.dataset.v;if(f==='by'){S.by=v}else if(f==='site'){S.site=v}render();return}
+  if((b=t.closest('#more'))){shown+=60;render();return}
+  var tr=t.closest('tr.po');
+  if(tr){var p=POS.filter(function(x){return x.no===tr.dataset.no})[0];
+    if(t.closest('[data-x]')){open[p.no]=!open[p.no];render();return}
+    if(t.closest('[data-wa]')){waModal([p]);return}
+  }
+  var it=t.closest('tr.items');
+  if(it){var p2=POS.filter(function(x){return x.no===it.dataset.no})[0];
+    if(t.closest('[data-wa]')){waModal([p2]);return}
+    if(t.closest('[data-copy]')){copy(waText([p2]));markWa([p2],'Pesan disalin');toast('Pesan disalin. Status: Sudah di-WA');render();return}
+    if(t.closest('[data-link]')){linkModal([p2]);return}
+  }
+  if(t.id==='vsend'){
+    var ok=0,rec=0;
+    document.querySelectorAll('.vpo').forEach(function(box){
+      var p=POS.filter(function(x){return x.no===box.dataset.no})[0];if(!p)return;
+      var ex=box.querySelector('.vsel').value,touched=false,gone=false;
+      box.querySelectorAll('.vit').forEach(function(r){var val=r.querySelector('input').value;if(!val||gone)return;touched=true;if(setEta(p,+r.dataset.i,val))gone=true});
+      if(gone){rec++;return}
+      if(touched){if(ex){p.exp=ex;p.status='transit'}ok++}
+    });
+    toast(ok||rec?ok+' PO diperbarui'+(rec?' · '+rec+' PO diterima dan keluar dari daftar':''):'Isi minimal satu tanggal ETA',!(ok||rec));
+    render();
+  }
+});
+document.addEventListener('change',function(e){
+  var t=e.target;
+  if(t.id==='by'){S.by=t.value;shown=60;render();return}
+  if(t.id==='me'){store.set('scm_nama',t.value);toast('Anda: '+t.value);return}
+  if(t.id==='sort'){S.sort=t.value;render();return}
+  if(t.id==='vsel'){S.vv=t.value;render();return}
+  if(t.id==='selAll'){var P=POS.filter(match).sort(sortFn()).slice(0,shown);P.forEach(function(p){picked[p.no]=t.checked});render();return}
+  var tr=t.closest('tr.po,tr.items');
+  if(t.dataset&&t.dataset.pick&&tr){picked[tr.dataset.no]=t.checked;bulkBtn();return}
+  if(!tr||!t.dataset.f)return;
+  var p=POS.filter(function(x){return x.no===tr.dataset.no})[0];if(!p)return;
+  var f=t.dataset.f,gone=false;
+  if(f==='etaA')gone=setEta(p,null,t.value);
+  else if(f==='itemEta')gone=setEta(p,+t.closest('tr').dataset.i,t.value);
+  else if(f==='status'){p.status=t.value;addHist(p,'Status → '+STM[t.value][1],t.value!=='none')}
+  else if(f==='note'){p.note=t.value;addHist(p,'Keterangan: '+(t.value||'(kosong)'),false)}
+  if(!gone){flashKey=p.no;toast('Tersimpan · '+me())}
+  render();
+});
+$('q').addEventListener('input',function(e){S.q=e.target.value;shown=60;render();var q=$('q');q.focus();q.setSelectionRange(q.value.length,q.value.length)});
+$('reset').onclick=function(){S.site='ALL';S.by='';S.q='';S.quick='';$('q').value='';shown=60;render()};
+$('waBulk').onclick=function(){waModal(pickedList())};
+$('lkBulk').onclick=function(){linkModal(pickedList())};
+$('exBulk').onclick=function(){exportVendors(pickedList())};
+$('pdf').onclick=function(){window.print()};
+$('dl').onclick=function(){
+  var rows=[['Site','No PO','Tanggal PO','Supplier','Buyer','Departemen','Item','Qty','ETA Vendor','ETA Aktual','Aging','Status','Keterangan']];
+  POS.filter(match).forEach(function(p){p.items.forEach(function(i){rows.push([p.site,p.no,iso(p.poDate),p.vendor,p.buyer,p.dept.replace(/&amp;/g,'&'),i.n.replace(/&amp;/g,'&'),i.q,iso(p.etaV),i.etaA?iso(i.etaA):'',aging(p),STM[p.status][1],p.note])})});
+  csv(rows,'Outstanding Open Order '+fmt(today)+'.csv');toast('Excel dummy diunduh ('+(rows.length-1)+' baris)');
+};
+$('upd').onclick=function(){$('loading').classList.add('show');setTimeout(function(){$('loading').classList.remove('show');asof=new Date();render();toast('Sinkron selesai · '+POS.length+' PO terbuka (demo)')},1100)};
+$('modal').addEventListener('click',function(e){if(e.target.id==='modal')closeModal()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal()});
+render();
+})();
+</script>
+</body>
+</html>

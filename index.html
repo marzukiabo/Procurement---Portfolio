@@ -176,6 +176,20 @@ section{padding:60px 0}
 .tlRow small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
 .tlRow time{font-size:11px;color:var(--muted);font-weight:700;white-space:nowrap}
 
+/* GREEN THEME (SCM Expeditor) */
+.theme-green{--gold:#1d6a49}
+.theme-green .eyebrow,.theme-green .num,.theme-green .block>h4,.theme-green .roleItem small{color:#1d6a49}
+.theme-green.pcard h3 span,.theme-green .panelBody h2 span{color:#1d6a49}
+.theme-green .points li:before{background:linear-gradient(135deg,#5fb48a,#1d6a49)}
+.theme-green .btn.primary{background:linear-gradient(135deg,#2f8f63,#1d6a49);border-color:#1d6a49;box-shadow:0 12px 28px rgba(29,106,73,.22)}
+.theme-green .bar i{background:linear-gradient(90deg,#2f8f63,#b5524a)}
+.theme-green .step.done{background:linear-gradient(135deg,#fbfdf8,#e3f1e6);border-color:#8fc9a8}
+.theme-green .step small{color:#1d6a49}
+.theme-green .note{background:linear-gradient(135deg,rgba(143,201,168,.3),rgba(255,255,255,.7));border-color:rgba(47,143,99,.25)}
+.theme-green.panel{border-color:rgba(47,143,99,.3)}
+.theme-green.pcard{border-color:rgba(47,143,99,.25)}
+.theme-green .mock{border-color:rgba(47,143,99,.25)}
+
 /* FOOTER */
 .footer{padding:30px 0 44px}
 .footerLine{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:22px;gap:20px;flex-wrap:wrap;color:var(--muted);font-size:12px}
@@ -423,6 +437,41 @@ const projects=[
   ])}</div>
   <div class="block"><h4>Technology Stack</h4><div class="tech">${chips(['Python','Tkinter','TkinterDnD','OpenPyXL','PyInstaller','Excel Automation','Desktop Application'])}</div></div>
   <div class="note"><span class="num">BUSINESS IMPACT</span><p>Turns a repetitive Excel preparation process into a controlled desktop workflow, standardizing monitoring output while reducing manual transformation steps.</p></div>`
+},
+{
+ id:'scm', theme:'green', demo:'expeditor/index.html', tab:'SCM EXPEDITOR', label:'Project 04 · Expediting Control',
+ title:'SCM <span>Expeditor System</span>',
+ lead:'Outstanding open order control for expeditors: automatic ERP sync, aging per buyer and site, follow-up lists, and vendor links to confirm ETA.',
+ points:['ERP sync 6x a day into a shared sheet, no manual copy-paste','Overdue vs on-progress per buyer, one click to the PO list','Vendor link (valid 2 days) for ETA and courier, status updates itself'],
+ stack:['Google Sheets','Apps Script','HTML / CSS / JS','Excel export'],
+ status:['live','Live Demo · Dummy Data'],
+ visual:`<div class="mock"><div class="mockbar"><i class="dot"></i><i class="dot"></i><i class="dot"></i></div><div class="screen">
+  <div class="miniTitle">Outstanding Open Order</div>
+  <div class="miniGrid"><div class="miniCard"><small>OPEN PO</small><strong>46</strong></div><div class="miniCard"><small>ON PROGRESS</small><strong class="green">26</strong></div><div class="miniCard"><small>OVERDUE</small><strong class="red">20</strong></div></div>
+  <div class="rowLine"><span>Andi</span><span>4 · 7</span></div><div class="bar" style="background:#f0d4d0"><i style="width:36%"></i></div>
+  <div class="siteRow"><span>PO.2026.11.0027</span>${badge('green','WAITING SHIPMENT')}</div>
+  <div class="siteRow"><span>PO.2026.11.0031</span>${badge('red','OVERDUE 3 HARI')}</div>
+ </div></div>`,
+ detail:()=>`
+  <span class="eyebrow">Project 04 · Expediting Control</span>
+  <h2>SCM <span>Expeditor System</span></h2>
+  <p class="lead">Built for the expediting team: open PO data from the ERP lands in one sheet automatically, and every chase (who, what, when) happens from one list. Names and values in the demo are fictional.</p>
+  <div class="cardFoot" style="margin:18px 0 0"><a class="btn primary" href="expeditor/index.html">Open Live Demo →</a></div>
+  <div class="block"><h4>How it flows</h4>${flow([['ERP','PO export'],['SYNC','6x daily'],['SHEET','Data + chips'],['FOLLOW UP','WA / Excel'],['VENDOR LINK','ETA + courier'],['DASHBOARD','Aging &amp; load']])}</div>
+  <div class="block two">
+   <div class="box"><h3>The challenge</h3><ul><li>Open PO data changes daily and was re-pasted by hand.</li><li>No shared view of overdue POs per buyer or per site.</li><li>Vendor chasing on WhatsApp with no record of who was contacted.</li></ul></div>
+   <div class="box"><h3>The solution</h3><ul><li>Scheduled sync; received POs drop out on their own.</li><li>ETA rules built in: vendor ETA, expeditor ETA actual, follow-up from H-1.</li><li>Status moves automatically when a message or link is sent and when the vendor replies.</li></ul></div>
+  </div>
+  <div class="block"><h4>Key Features</h4>${feats([
+   ['Aging &amp; Load Dashboard','Average aging for All, Goods and Service, load share per site, and arrivals per month.'],
+   ['Buyer Drill-down','Overdue and on-progress bars per buyer; click a number to open exactly those POs.'],
+   ['Follow Up PO','Search, sort, multi-select, combined WhatsApp message per vendor, and Excel export with an ETA column.'],
+   ['Vendor Link','Tokenised link valid 2 days; the vendor only fills ETA per item and courier.'],
+   ['Automatic Status','Waiting vendor, WhatsApp sent, waiting shipment, in transit; a past ETA means delivered.'],
+   ['Priority Markers','Breakdown, backlog and VHS items are tagged, and codes inside PR text are highlighted.']
+  ])}</div>
+  <div class="block"><h4>Technology Stack</h4><div class="tech">${chips(['Google Sheets','Google Apps Script','HTML5','CSS3','JavaScript','Excel export'])}</div></div>
+  <div class="note"><span class="num">PORTFOLIO NOTE</span><p>The live demo runs entirely in your browser with generated data. The production spreadsheet, endpoints, keys and data pipeline are private.</p></div>`
 }
 ];
 
@@ -431,7 +480,7 @@ $('#roleGrid').innerHTML=[
  ['Process','Procurement, expediting &amp; logistics workflow requirements'],
  ['System','Dashboard, tracking, search, and automation design'],
  ['Data','PO, invoice, payment, delivery, and purchase-history visibility'],
- ['UI / UX','Gold, white &amp; glass interface built around real users']
+ ['UI / UX','Gold, green &amp; glass interfaces built around real users']
 ].map(([s,b])=>`<div class="roleItem"><small>${s}</small><b>${b}</b></div>`).join('');
 
 /* =========================================================
@@ -441,7 +490,7 @@ let idx=0;
 const track=$('#track'), dots=$('#dots'), ptabs=$('#ptabs');
 track.innerHTML=projects.map((p,i)=>`
 <div class="slide" role="group" aria-roledescription="slide" aria-label="${i+1} of ${projects.length}">
- <article class="glass pcard">
+ <article class="glass pcard${p.theme?' theme-'+p.theme:''}">
   <div>
    <span class="eyebrow">${p.label}</span>
    <h3>${p.title}</h3>
@@ -449,7 +498,7 @@ track.innerHTML=projects.map((p,i)=>`
    <ul class="points">${p.points.map(x=>`<li>${x}</li>`).join('')}</ul>
    <div class="tech">${chips(p.stack)}</div>
    <div class="cardFoot">
-    <button class="btn primary" data-detail="${i}">Detail →</button>
+    <button class="btn primary" data-detail="${i}">Detail →</button>${p.demo?`<a class="btn" href="${p.demo}">Live Demo ↗</a>`:''}
     <span class="status ${p.status[0]}">${p.status[1]}</span>
    </div>
   </div>
@@ -501,6 +550,7 @@ function openDetail(i){
  const p=projects[i];
  lastFocus=document.activeElement;
  $('#modalTitle').innerHTML=p.title.replace(/<[^>]+>/g,'');
+ $('.panel').className='panel'+(p.theme?' theme-'+p.theme:'');
  $('#modalBody').innerHTML=p.detail();
  $('#modal').classList.add('open');
  $('#modal').setAttribute('aria-hidden','false');
